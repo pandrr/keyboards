@@ -556,8 +556,8 @@ printMouse(posy++);
 #endif
 
 
-//report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
-report_mouse_t pointing_device_task_auto_mouse(report_mouse_t mouse_report) {
+//report_mouse_t pointing_device_task_auto_mouse(report_mouse_t mouse_report) {
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 //  if (get_highest_layer(layer_state)==_SCROLL) {
     mouse_report.v=mouse_report.y;
     mouse_report.h=mouse_report.x;
