@@ -575,7 +575,6 @@ report_mouse_t pointing_device_task_combined_user(report_mouse_t r1,report_mouse
         mouse_report.x=0;
         mouse_report.y=0;
     }
-
     return mouse_report;
 }
 /*
