@@ -9,7 +9,6 @@ enum layers {
     _QWERTY,
     _MYSTUFF,
     _MOUSE,
-    _SCROLL,
     _SYM,
     _OSM,
     _ADJUST,
@@ -17,6 +16,7 @@ enum layers {
 
 uint8_t led_min=0,led_max=1;
 //uint8_t led_min=1,led_max=255;
+int lastScroll=0;//timer_read();
 
 
 #define USE_I2C
@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,            KC_LCTL,   _______,      KC_J ,  KC_L ,  KC_U ,    KC_Y ,  KC_SCLN ,   KC_QUOTE,
         KC_LSFT , KC_A ,  KC_S   ,  KC_R,     KC_T ,   KC_G ,            KC_LALT,   KC_8,         KC_M ,  KC_N,   KC_E,     KC_I ,  KC_O,       KC_ENT,
         KC_LCTL , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,   KC_MINS,  KC_EQL,      KC_RBRC, KC_K ,  KC_H ,  KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                 OSM(MOD_LALT), KC_LCTL, KC_LGUI, KC_BSPC,  TT(_MOUSE),  MO(_SCROLL),     KC_SPC, KC_ENT, TT(_MYSTUFF), KC_HYPR,
+                                 OSM(MOD_LALT), KC_LCTL, KC_LGUI, KC_BSPC,  TT(_MOUSE),  MO(_MOUSE),     KC_SPC, KC_ENT, TT(_MYSTUFF), KC_HYPR,
 
       KC_A, KC_B, KC_Q, KC_S ,   KC_MUTE,                            KC_B, KC_C, KC_D, KC_E,    KC_A
     ),
@@ -126,9 +126,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_MOUSE] = LAYOUT_myr(
         _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______,
-        _______, _______, MS_ACL0, MS_ACL1, MS_ACL2, _______,          _______, _______,          _______, _______, MS_UP, _______, _______, _______,
-        _______, _______, MS_BTN2, MS_BTN3, MS_BTN1, _______,          _______, _______,          _______, MS_LEFT, MS_DOWN, MS_RGHT, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
+        _______, _______, MS_ACL0, MS_ACL1, MS_ACL2, _______,          _______, _______,          MS_BTN1, _______, MS_UP, _______, _______, _______,
+        _______, _______, MS_BTN2, MS_BTN3, MS_BTN1, _______,          _______, _______,          MS_BTN3, MS_LEFT, MS_DOWN, MS_RGHT, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, MS_BTN2, _______, _______, _______,  _______, _______,
                                    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
 
         _______, _______, _______, _______,          _______,                   _______, _______, _______, _______,          _______
@@ -491,36 +491,39 @@ plot_line(59,16.38+posy ,66,16.38+posy);
 
 }
 
+bool doScroll=false;
 
 uint16_t lastPosy=0;
 #ifdef USE_I2C
 bool oled_task_user(void) {
-        oled_clear();
+    oled_clear();
 
     uint8_t posy=0;
-  // Host Keyboard Layer Status
-  switch (get_highest_layer(layer_state)) {
-    case _COLEMAK:
-      oled_write_P(PSTR("\n"), false);
-      break;
-    case _MYSTUFF:
-      //oled_write_P(PSTR("NAV\n"), false);
-    printNav(posy++);
-      break;
-    case _OSM:
-      oled_write_P(PSTR("OSM\n"), false);
-      break;
-    case _MOUSE:
-      //oled_write_P(PSTR("MOUSE\n"), false);
-printMouse(posy++);
-      break;
-    case _SCROLL:
-      oled_write_P(PSTR("SCROLL\n"), false);
-      break;
-    case _QWERTY:
-      oled_write_P(PSTR("QWERTY\n"), false);
-      break;
-  }
+    // Host Keyboard Layer Status
+    switch (get_highest_layer(layer_state)) {
+        case _COLEMAK:
+            oled_write_P(PSTR("\n"), false);
+            break;
+        case _MYSTUFF:
+            //oled_write_P(PSTR("NAV\n"), false);
+            printNav(posy++);
+            break;
+        case _OSM:
+            oled_write_P(PSTR("OSM\n"), false);
+            break;
+        case _MOUSE:
+            if(!doScroll)lastScroll=timer_read();
+            doScroll=true;
+            printMouse(posy++);
+            break;
+        case _QWERTY:
+            oled_write_P(PSTR("QWERTY\n"), false);
+            break;
+        default:
+            break;
+    }
+
+  if (get_highest_layer(layer_state)!=_MOUSE) doScroll=false;
 
     if(get_mods() & MOD_MASK_SHIFT) printShift(posy++); //oled_write_P(PSTR("SHIFT "), false);
     if(get_mods() & MOD_MASK_GUI) printCmd(posy++);//oled_write_P(PSTR("CMD "), true);
@@ -555,17 +558,23 @@ printMouse(posy++);
 }
 #endif
 
+report_mouse_t pointing_device_task_combined_user(report_mouse_t r1,report_mouse_t mouse_report)
+{
+    if(doScroll)
+    {
+        if(timer_read()-lastScroll>30)
+        {
+            lastScroll=timer_read();
 
-//report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
-report_mouse_t pointing_device_task_auto_mouse(report_mouse_t mouse_report) {
-//  if (get_highest_layer(layer_state)==_SCROLL) {
-    mouse_report.v=mouse_report.y;
-    mouse_report.h=mouse_report.x;
-    mouse_report.x=0;
-    mouse_report.y=0;
-      oled_write_P(PSTR("MOUSREPO\n"), false);
-
-  //  }
+            if(mouse_report.y>2)mouse_report.v=-2;
+            if(mouse_report.y<-2)mouse_report.v=2;
+        }
+        else
+        {
+        }
+        mouse_report.x=0;
+        mouse_report.y=0;
+    }
 
     return mouse_report;
 }

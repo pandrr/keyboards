@@ -1,0 +1,7 @@
+#define MOUSEKEY_MAX_SPEED 3
+#define TAPPING_TOGGLE 2
+
+
+#define RETRO_TAPPING
+
+
