@@ -1,6 +1,7 @@
 // Copyright 2024 splitkb.com (support@splitkb.com)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include <stdint.h>
 #include QMK_KEYBOARD_H
 // #include "drivers/sensors/pimoroni_trackball.h"
 
@@ -76,9 +77,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_COLEMAK] = LAYOUT_myr(
         KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,            KC_LSFT,   _______,      KC_6 ,  KC_7 ,  _______ , KC_9 ,  KC_0 ,      KC_BSPC,
         KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,            KC_LCTL,   _______,      KC_J ,  KC_L ,  KC_U ,    KC_Y ,  KC_SCLN ,   KC_QUOTE,
-        KC_LALT , KC_A ,  KC_S   ,  KC_R,     KC_T ,   KC_G ,            KC_LALT,   KC_8,         KC_M ,  KC_N,   KC_E,     KC_I ,  KC_O,       KC_ENT,
+        KC_LSFT, KC_A ,  KC_S   ,  KC_R,     KC_T ,   KC_G ,            KC_LALT,   KC_8,         KC_M ,  KC_N,   KC_E,     KC_I ,  KC_O,       KC_ENT,
         OSM(MOD_LSFT), KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , MS_BTN1,   MS_BTN2,  KC_VOLD,KC_VOLU, KC_K ,  KC_H ,  KC_COMM, KC_DOT ,KC_SLSH,   OSM(MOD_LSFT),
-                                 MO(_SYM), KC_LCTL, KC_LGUI, KC_BSPC,  MS_BTN3,  MO(_MOUSE),     KC_SPC, MT(MOD_LSFT,KC_ENT), TT(_MYSTUFF), KC_HYPR,
+                                  KC_LALT,KC_LCTL, KC_LGUI, MO(_SYM),  MS_BTN3,  MO(_MOUSE),     KC_SPC, MT(MOD_LSFT,KC_ENT), TT(_MYSTUFF), KC_HYPR,
 
       KC_A, KC_B, KC_Q, KC_S ,   KC_MUTE,                            KC_B, KC_C, KC_D, KC_E,    KC_A
     ),
@@ -96,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      [_MYSTUFF] = LAYOUT_myr(
        VIM_CMD,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX, XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, KC_DEL,
        S(KC_TAB), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX, XXXXXXX,          XXXXXXX, XXXXXXX, KC_UP,   XXXXXXX,  XXXXXXX, XXXXXXX,
-       XXXXXXX,   OSM(MOD_LALT),OSM(MOD_LSFT),OSM(MOD_LCTL),OSM(MOD_LGUI), XXXXXXX,          XXXXXXX, XXXXXXX,          XXXXXXX, KC_LEFT, KC_DOWN, KC_UP,KC_RIGHT, XXXXXXX,
+       XXXXXXX,   OSM(MOD_LALT),OSM(MOD_LSFT),OSM(MOD_LCTL),OSM(MOD_LGUI), XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, KC_LEFT, KC_DOWN, KC_RIGHT,XXXXXXX,XXXXXXX,
        XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_REP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX,
                                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG(_MYSTUFF), XXXXXXX,
         _______, _______, _______, _______,          _______,                   _______, _______, _______, _______,          _______
@@ -111,6 +112,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         _______, _______, _______, _______,          _______,                   _______, _______, _______, _______,          _______
     ),
+    /*
+    *      1 2 3 4 5   6 7 8 9 0         
+    *        [ { ( +   - ) } ] |
+    *      ~ ` ' " =   _ | ; : \
+    */
 
     [_SYM] = LAYOUT_myr(
       _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______,
@@ -118,7 +124,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, KC_PLUS, KC_LBRC, KC_LCBR, KC_LPRN, KC_PLUS,          _______, _______,         KC_MINUS, KC_RPRN, KC_RCBR, KC_RBRC, KC_MINUS,_______,
       _______, _______, _______, _______, _______, KC_SCLN, _______, _______, _______, _______, KC_COLN, _______, _______, _______, _______, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-
       _______, _______, _______, _______,          _______,                   _______, _______, _______, _______,          _______
     ),
      [_OSM] = LAYOUT(
@@ -163,60 +168,69 @@ void plot_line (int x0, int y0, int x1, int y1)
 }
 
 uint8_t lineHeight=25;
+bool draw=false;
 
-
-void printSym(uint16_t posy)
+uint16_t printSym(uint16_t posy)
 {
-  plot_line(10,0.38+posy ,3,0.38+posy);
-plot_line(3,0.38+posy ,0,3.38+posy);
-plot_line(0,3.38+posy ,0,5.38+posy);
-plot_line(0,5.38+posy ,9,11.38+posy);
-plot_line(9,11.38+posy ,9,14.38+posy);
-plot_line(9,14.38+posy ,7,16.38+posy);
-plot_line(7,16.38+posy ,0,16.38+posy);
-plot_line(14,0.38+posy ,18,10.38+posy);
-plot_line(18,10.38+posy ,20,10.38+posy);
-plot_line(20,10.38+posy ,25,0.38+posy);
-plot_line(19,10.38+posy ,19,16.38+posy);
-plot_line(28,16.38+posy ,28,0.38+posy);
-plot_line(28,0.38+posy ,35,16.38+posy);
-plot_line(35,16.38+posy ,35,16.38+posy);
-plot_line(35,16.38+posy ,42,0.38+posy);
-plot_line(42,0.38+posy ,42,16.38+posy);
-plot_line(66,0.38+posy ,60,0.38+posy);
-plot_line(60,0.38+posy ,58,2.38+posy);
-plot_line(58,2.38+posy ,58,16.38+posy);
-plot_line(64,9.38+posy ,58,9.38+posy);
+    if(draw)
+    {
+        plot_line(10,0.38+posy ,3,0.38+posy);
+        plot_line(3,0.38+posy ,0,3.38+posy);
+        plot_line(0,3.38+posy ,0,5.38+posy);
+        plot_line(0,5.38+posy ,9,11.38+posy);
+        plot_line(9,11.38+posy ,9,14.38+posy);
+        // plot_line(9,14.38+posy ,7,16.38+posy);
+        // plot_line(7,16.38+posy ,0,16.38+posy);
+        // plot_line(14,0.38+posy ,18,10.38+posy);
+        // plot_line(18,10.38+posy ,20,10.38+posy);
+        // plot_line(20,10.38+posy ,25,0.38+posy);
+        // plot_line(19,10.38+posy ,19,16.38+posy);
+        // plot_line(28,16.38+posy ,28,0.38+posy);
+        // plot_line(28,0.38+posy ,35,16.38+posy);
+        // plot_line(35,16.38+posy ,35,16.38+posy);
+        // plot_line(35,16.38+posy ,42,0.38+posy);
+        // plot_line(42,0.38+posy ,42,16.38+posy);
+        // plot_line(66,0.38+posy ,60,0.38+posy);
+        // plot_line(60,0.38+posy ,58,2.38+posy);
+        // plot_line(58,2.38+posy ,58,16.38+posy);
+        // plot_line(64,9.38+posy ,58,9.38+posy);
+    }
 
+    return posy+25;
 }
 
-void printCmd(uint16_t posy)
+uint16_t printCmd(uint16_t posy)
 {
-    posy*=lineHeight;
+    if(draw)
+    {
     plot_line(12,2+posy ,10,0+posy);
     plot_line(10,0+posy ,4,0+posy);
     plot_line(4,0+posy ,0,3+posy);
     plot_line(0,3+posy ,0,16+posy);
     plot_line(0,16+posy ,3,20+posy);
     plot_line(3,20+posy ,10,20+posy);
-    plot_line(10,20+posy ,12,17+posy);
-    plot_line(17,20+posy ,17,0+posy);
-    plot_line(17,0+posy ,20,0+posy);
-    plot_line(20,0+posy ,26,20+posy);
-    plot_line(26,20+posy ,28,20+posy);
-    plot_line(28,20+posy ,34,0+posy);
-    plot_line(34,0+posy ,37,0+posy);
-    plot_line(37,0+posy ,37,20+posy);
-    plot_line(37,0+posy ,37,20+posy);
-    plot_line(37,20+posy ,46,20+posy);
-    plot_line(46,20+posy ,49,17+posy);
-    plot_line(49,17+posy ,49,3+posy);
-    plot_line(49,3+posy ,46,0+posy);
-    plot_line(46,0+posy ,37,0+posy);
+    // plot_line(10,20+posy ,12,17+posy);
+    // plot_line(17,20+posy ,17,0+posy);
+    // plot_line(17,0+posy ,20,0+posy);
+    // plot_line(20,0+posy ,26,20+posy);
+    // plot_line(26,20+posy ,28,20+posy);
+    // plot_line(28,20+posy ,34,0+posy);
+    // plot_line(34,0+posy ,37,0+posy);
+    // plot_line(37,0+posy ,37,20+posy);
+    // plot_line(37,0+posy ,37,20+posy);
+    // plot_line(37,20+posy ,46,20+posy);
+    // plot_line(46,20+posy ,49,17+posy);
+    // plot_line(49,17+posy ,49,3+posy);
+    // plot_line(49,3+posy ,46,0+posy);
+    // plot_line(46,0+posy ,37,0+posy);
+    }
+
+    return posy+25;
 }
-void printShift(uint16_t posy)
+uint16_t printShift(uint16_t posy)
 {
-    posy*=lineHeight;
+    if(draw)
+    {
     plot_line(12,0+posy ,3,0+posy);
     plot_line(3,0+posy ,0,3+posy);
     plot_line(0,3+posy ,0,7+posy);
@@ -224,105 +238,125 @@ void printShift(uint16_t posy)
     plot_line(11,13+posy ,11,17+posy);
     plot_line(11,17+posy ,8,20+posy);
     plot_line(8,20+posy ,0,20+posy);
-    plot_line(17,0+posy ,17,20+posy);
-    plot_line(17,10+posy ,30,10+posy);
-    plot_line(30,0+posy ,30,20+posy);
-    plot_line(44,0+posy ,36,0+posy);
-    plot_line(36,0+posy ,34,2+posy);
-    plot_line(34,2+posy ,34,20+posy);
-    plot_line(42,11+posy ,34,11+posy);
-    plot_line(56,0+posy ,56,20+posy);
-    plot_line(62,0+posy ,50,0+posy);
+    // plot_line(17,0+posy ,17,20+posy);
+    // plot_line(17,10+posy ,30,10+posy);
+    // plot_line(30,0+posy ,30,20+posy);
+    // plot_line(44,0+posy ,36,0+posy);
+    // plot_line(36,0+posy ,34,2+posy);
+    // plot_line(34,2+posy ,34,20+posy);
+    // plot_line(42,11+posy ,34,11+posy);
+    // plot_line(56,0+posy ,56,20+posy);
+    // plot_line(62,0+posy ,50,0+posy);
+    }
+
+    return posy+25;
 }
-void printCtrl(uint16_t posy)
+
+uint16_t printCtrl(uint16_t posy)
 {
-    posy*=lineHeight;
+    if(draw)
+    {
     plot_line(12,2+posy ,10,0+posy);
     plot_line(10,0+posy ,4,0+posy);
     plot_line(4,0+posy ,0,3+posy);
     plot_line(0,3+posy ,0,16+posy);
     plot_line(0,16+posy ,3,20+posy);
-    plot_line(3,20+posy ,10,20+posy);
-    plot_line(10,20+posy ,12,17+posy);
-    plot_line(23,0+posy ,23,20+posy);
-    plot_line(29,0+posy ,17,0+posy);
-    plot_line(45,20+posy ,42,11+posy);
-    plot_line(34,20+posy ,34,0+posy);
-    plot_line(34,0+posy ,43,0+posy);
-    plot_line(43,0+posy ,45,2+posy);
-    plot_line(45,2+posy ,45,8+posy);
-    plot_line(45,8+posy ,43,11+posy);
-    plot_line(43,11+posy ,34,11+posy);
-    plot_line(50,0+posy ,50,20+posy);
-    plot_line(50,20+posy ,60,20+posy);
+    // plot_line(3,20+posy ,10,20+posy);
+    // plot_line(10,20+posy ,12,17+posy);
+    // plot_line(23,0+posy ,23,20+posy);
+    // plot_line(29,0+posy ,17,0+posy);
+    // plot_line(45,20+posy ,42,11+posy);
+    // plot_line(34,20+posy ,34,0+posy);
+    // plot_line(34,0+posy ,43,0+posy);
+    // plot_line(43,0+posy ,45,2+posy);
+    // plot_line(45,2+posy ,45,8+posy);
+    // plot_line(45,8+posy ,43,11+posy);
+    // plot_line(43,11+posy ,34,11+posy);
+    // plot_line(50,0+posy ,50,20+posy);
+    // plot_line(50,20+posy ,60,20+posy);
+    }
+
+    return posy+25;
 }
 
-void printNav(uint16_t posy)
+uint16_t printNav(uint16_t posy)
 {
-    posy*=lineHeight;
+    if(draw)
+    {
     plot_line(0,20+posy ,0,0+posy);
     plot_line(0,0+posy ,3,0+posy);
     plot_line(3,0+posy ,11,20+posy);
-    plot_line(11,20+posy ,13,20+posy);
-    plot_line(13,20+posy ,13,0+posy);
-    plot_line(31,13+posy ,20,13+posy);
-    plot_line(17,20+posy ,24,0+posy);
-    plot_line(24,0+posy ,26,0+posy);
-    plot_line(26,0+posy ,33,20+posy);
-    plot_line(35,0+posy ,41,20+posy);
-    plot_line(41,20+posy ,44,20+posy);
-    plot_line(44,20+posy ,50,0+posy);
+    // plot_line(11,20+posy ,13,20+posy);
+    // plot_line(13,20+posy ,13,0+posy);
+    // plot_line(31,13+posy ,20,13+posy);
+    // plot_line(17,20+posy ,24,0+posy);
+    // plot_line(24,0+posy ,26,0+posy);
+    // plot_line(26,0+posy ,33,20+posy);
+    // plot_line(35,0+posy ,41,20+posy);
+    // plot_line(41,20+posy ,44,20+posy);
+    // plot_line(44,20+posy ,50,0+posy);
+    }
+
+    return posy+25;
 }
 
-void printAlt(uint16_t posy)
+uint16_t printAlt(uint16_t posy)
 {
-    posy*=lineHeight;
+    if(draw)
+    {
 plot_line(13,13+posy ,2,13+posy);
 plot_line(0,20+posy ,7,0+posy);
 plot_line(7,0+posy ,9,0+posy);
 plot_line(9,0+posy ,15,20+posy);
-plot_line(18,0+posy ,18,20+posy);
-plot_line(18,20+posy ,28,20+posy);
-plot_line(40,0+posy ,40,20+posy);
-plot_line(46,0+posy ,34,0+posy);
+// plot_line(18,0+posy ,18,20+posy);
+// plot_line(18,20+posy ,28,20+posy);
+// plot_line(40,0+posy ,40,20+posy);
+// plot_line(46,0+posy ,34,0+posy);
+    }
+
+    return posy+25;
 
 }
 
 
-void printMouse(uint16_t posy)
+uint16_t printMouse(uint16_t posy)
 {
-    posy*=lineHeight;
+    if(draw)
+    {
     plot_line(0,16.38+posy ,0,0.38+posy);
 plot_line(0,0.38+posy ,7,16.38+posy);
 plot_line(7,16.38+posy ,7,16.38+posy);
 plot_line(7,16.38+posy ,14,0.38+posy);
 plot_line(14,0.38+posy ,14,16.38+posy);
-plot_line(15,2.38+posy ,18,0.38+posy);
-plot_line(18,0.38+posy ,24,0.38+posy);
-plot_line(24,0.38+posy ,27,2.38+posy);
-plot_line(27,2.38+posy ,27,13.38+posy);
-plot_line(27,13.38+posy ,24,16.38+posy);
-plot_line(24,16.38+posy ,18,16.38+posy);
-plot_line(18,16.38+posy ,15,13.38+posy);
-plot_line(15,13.38+posy ,15,2.38+posy);
-plot_line(30,0.38+posy ,30,14.38+posy);
-plot_line(30,14.38+posy ,32,16.38+posy);
-plot_line(32,16.38+posy ,38,16.38+posy);
-plot_line(38,16.38+posy ,40,14.38+posy);
-plot_line(40,14.38+posy ,40,0.38+posy);
-plot_line(53,0.38+posy ,46,0.38+posy);
-plot_line(46,0.38+posy ,44,3.38+posy);
-plot_line(44,3.38+posy ,44,5.38+posy);
-plot_line(44,5.38+posy ,53,11.38+posy);
-plot_line(53,11.38+posy ,53,14.38+posy);
-plot_line(53,14.38+posy ,50,16.38+posy);
-plot_line(50,16.38+posy ,44,16.38+posy);
-plot_line(64,8.38+posy ,57,8.38+posy);
-plot_line(66,0.38+posy ,59,0.38+posy);
-plot_line(59,0.38+posy ,57,2.38+posy);
-plot_line(57,2.38+posy ,57,14.38+posy);
-plot_line(57,14.38+posy ,59,16.38+posy);
-plot_line(59,16.38+posy ,66,16.38+posy);
+// plot_line(15,2.38+posy ,18,0.38+posy);
+// plot_line(18,0.38+posy ,24,0.38+posy);
+// plot_line(24,0.38+posy ,27,2.38+posy);
+// plot_line(27,2.38+posy ,27,13.38+posy);
+// plot_line(27,13.38+posy ,24,16.38+posy);
+// plot_line(24,16.38+posy ,18,16.38+posy);
+// plot_line(18,16.38+posy ,15,13.38+posy);
+// plot_line(15,13.38+posy ,15,2.38+posy);
+// plot_line(30,0.38+posy ,30,14.38+posy);
+// plot_line(30,14.38+posy ,32,16.38+posy);
+// plot_line(32,16.38+posy ,38,16.38+posy);
+// plot_line(38,16.38+posy ,40,14.38+posy);
+// plot_line(40,14.38+posy ,40,0.38+posy);
+// plot_line(53,0.38+posy ,46,0.38+posy);
+// plot_line(46,0.38+posy ,44,3.38+posy);
+// plot_line(44,3.38+posy ,44,5.38+posy);
+// plot_line(44,5.38+posy ,53,11.38+posy);
+// plot_line(53,11.38+posy ,53,14.38+posy);
+// plot_line(53,14.38+posy ,50,16.38+posy);
+// plot_line(50,16.38+posy ,44,16.38+posy);
+// plot_line(64,8.38+posy ,57,8.38+posy);
+// plot_line(66,0.38+posy ,59,0.38+posy);
+// plot_line(59,0.38+posy ,57,2.38+posy);
+// plot_line(57,2.38+posy ,57,14.38+posy);
+// plot_line(57,14.38+posy ,59,16.38+posy);
+// plot_line(59,16.38+posy ,66,16.38+posy);
+    }
+
+    return posy+25;
 
 }
 
@@ -331,67 +365,84 @@ bool doScroll=false;
 uint16_t lastPosy=0;
 #ifdef USE_I2C
 bool oled_task_user(void) {
-    //oled_clear();
+return true;
+    uint16_t posy=0;
 
-    uint8_t posy=0;
-    // Host Keyboard Layer Status
-    switch (get_highest_layer(layer_state)) {
-        case _COLEMAK:
-            oled_write_P(PSTR("\n"), false);
-            break;
-        case _MYSTUFF:
-            printNav(posy++);
-            break;
-        case _SYM:
-            printSym(posy++);
-      oled_set_cursor(0,4);
-            oled_write_P(PSTR("   = _ \n"), false);
-            oled_write_P(PSTR("[{(+ -)}] \n"), false);
-            oled_write_P(PSTR("   : ; \n"), false);
-            break;
-        case _OSM:
-            oled_write_P(PSTR("OSM\n"), false);
-            break;
-        case _MOUSE:
-            if(!doScroll)lastScroll=timer_read();
-            doScroll=true;
-            printMouse(posy++);
-            break;
-        case _QWERTY:
-            oled_write_P(PSTR("QWERTY\n"), false);
-            break;
-        default:
-            break;
+    for(uint16_t i=0;i<2;i++)
+    {
+        posy=0;
+        if(i==0)draw=false;
+        else
+        {
+            oled_clear();
+            draw=true;
+        } 
+
+        switch (get_highest_layer(layer_state)) {
+            case _COLEMAK:
+//                oled_write_P(PSTR("\n"), false);
+                break;
+            case _MYSTUFF:
+                posy=printNav(posy);
+                break;
+            case _SYM:
+                posy+=printSym(posy);
+                oled_set_cursor(0,(posy+4)/8);
+                oled_write_P(PSTR("   = _ \n"), false);
+                oled_write_P(PSTR("[{(+ -)}]\n"), false);
+                oled_write_P(PSTR("   : ; \n"), false);
+                posy+=8*3;
+                break;
+            case _OSM:
+                oled_write_P(PSTR("OSM\n"), false);
+                break;
+            case _MOUSE:
+                if(!doScroll)lastScroll=timer_read();
+                doScroll=true;
+                posy=printMouse(posy);
+                break;
+            case _QWERTY:
+                oled_write_P(PSTR("QWERTY\n"), false);
+                break;
+            default:
+                break;
+        }
+
+        if (get_highest_layer(layer_state)!=_MOUSE) doScroll=false;
+
+        if(get_mods() & MOD_MASK_SHIFT) posy=printShift(posy); //oled_write_P(PSTR("SHIFT "), false);
+        if(get_mods() & MOD_MASK_GUI) posy=printCmd(posy);//oled_write_P(PSTR("CMD "), true);
+        if(get_mods() & MOD_MASK_ALT) posy=printAlt(posy);//oled_write_P(PSTR("ALT "), false);
+        if(get_mods() & MOD_MASK_CTRL) posy=printCtrl(posy);//oled_write_P(PSTR("CTRL "), false);
+
+        if(get_oneshot_mods() & MOD_MASK_SHIFT)
+        {
+            posy+=8;
+            oled_write_P(PSTR("SHIFT... "), false);
+        }
+        if(get_oneshot_mods() & MOD_MASK_GUI)
+        {
+            posy+=8;
+             oled_write_P(PSTR("CMD... "), false);
+        }
+        if(get_oneshot_mods() & MOD_MASK_ALT)
+        {
+            posy+=8;
+             oled_write_P(PSTR("ALT... "), false);
+        }
+        if(get_oneshot_mods() & MOD_MASK_CTRL)
+        {
+            posy+=8;
+            oled_write_P(PSTR("CTRL... "), false);
+        }
+
+        if(i==0)
+            if(lastPosy==posy)break;
+
+        oled_render_dirty(true);
     }
 
-  if (get_highest_layer(layer_state)!=_MOUSE) doScroll=false;
-
-    if(get_mods() & MOD_MASK_SHIFT) printShift(posy++); //oled_write_P(PSTR("SHIFT "), false);
-    if(get_mods() & MOD_MASK_GUI) printCmd(posy++);//oled_write_P(PSTR("CMD "), true);
-    if(get_mods() & MOD_MASK_ALT) printAlt(posy++);//oled_write_P(PSTR("ALT "), false);
-    if(get_mods() & MOD_MASK_CTRL) printCtrl(posy++);//oled_write_P(PSTR("CTRL "), false);
-
-
-    if(get_oneshot_mods() & MOD_MASK_SHIFT) oled_write_P(PSTR("SHIFT... "), false);
-    if(get_oneshot_mods() & MOD_MASK_GUI) oled_write_P(PSTR("CMD... "), false);
-    if(get_oneshot_mods() & MOD_MASK_ALT) oled_write_P(PSTR("ALT... "), false);
-    if(get_oneshot_mods() & MOD_MASK_CTRL) printCtrl(posy++);//oled_write_P(PSTR("CTRL... "), false);
-
-   // oled_write_P(PSTR("\n"), false);
-   // oled_write_P(PSTR("\n"), false);
-
-//uint16_t t=(timer_read()/100)%15;
-//for(int i=0;i<100;i++)
-//plot_line(i+t,0,i,128-t);
-
-    //plot_line(0,0,64,128);
-
-    if(lastPosy!=posy)
-        oled_render_dirty(true);
-
     lastPosy=posy;
-
-
 
 
     return true;
