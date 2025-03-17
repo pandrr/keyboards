@@ -14,7 +14,7 @@ combo_t                key_combos[]  = {COMBO(test_combo1, LALT(KC_A)), // keyco
 
 enum layers {
     _COLEMAK = 0,
-    _QWERTY,
+    _HYPR,
     _MYSTUFF,
     _MOUSE,
     _SYM,
@@ -79,19 +79,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,            KC_LCTL,   _______,      KC_J ,  KC_L ,  KC_U ,    KC_Y ,  KC_SCLN ,   KC_QUOTE,
         KC_LSFT, KC_A ,  KC_S   ,  KC_R,     KC_T ,   KC_G ,            KC_LALT,   KC_8,         KC_M ,  KC_N,   KC_E,     KC_I ,  KC_O,       KC_ENT,
         OSM(MOD_LSFT), KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , MS_BTN1,   MS_BTN2,  KC_VOLD,KC_VOLU, KC_K ,  KC_H ,  KC_COMM, KC_DOT ,KC_SLSH,   OSM(MOD_LSFT),
-                                  KC_LALT,KC_LCTL, KC_LGUI, MO(_SYM),  MS_BTN3,  MO(_MOUSE),     KC_SPC, MT(MOD_LSFT,KC_ENT), TT(_MYSTUFF), KC_HYPR,
+                                  KC_LALT,KC_LCTL, KC_LGUI, MT(MOD_LSFT,KC_ENT),  MS_BTN3,  MO(_MOUSE),     KC_SPC,  TT(_MYSTUFF), MO(_SYM),MO(_HYPR),
 
       KC_A, KC_B, KC_Q, KC_S ,   KC_MUTE,                            KC_B, KC_C, KC_D, KC_E,    KC_A
     ),
 
-    [_QWERTY] = LAYOUT_myr(
+    [_HYPR] = LAYOUT_myr(
         _______, _______, _______, _______, _______, _______,         _______, _______,          _______, _______, _______, _______,  _______, _______,
-        _______, KC_Q ,  KC_W   ,  KC_E  ,   KC_R ,   KC_T ,            KC_LCTL,   _______,      KC_Y ,  KC_U ,  KC_I ,    KC_O ,  KC_P ,   _______,
-        _______, KC_A ,  KC_S   ,  KC_D,     KC_F ,   KC_G ,            KC_LALT,   KC_8,         KC_H ,  KC_J,   KC_K,     KC_L ,  KC_SCLN,       _______,
-        _______, KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC,   KC_MINS,  KC_EQL,      KC_RBRC, KC_N ,  KC_M ,  _______, _______ , _______, _______,
-                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-
-      KC_A, KC_B, KC_Q, KC_S ,   KC_MUTE,                            KC_B, KC_C, KC_D, KC_E,    KC_A
+        LGUI(KC_TILDE), KC_Q ,  KC_W,HYPR(KC_F),KC_R,HYPR(KC_T) ,            KC_LCTL,   _______,      KC_Y , KC_U ,  HYPR(KC_UP) ,    KC_O ,  KC_P ,   _______,
+        _______, KC_A ,  KC_S,HYPR(KC_R),HYPR(KC_T), KC_G ,            KC_LALT,   KC_8,         HYPR(KC_M) , HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), KC_SCLN, _______,
+        _______, KC_Z ,  KC_X,HYPR(KC_C),HYPR(KC_D), KC_V , _______   ,KC_MINUS,  KC_EQL,      KC_RBRC, KC_N ,HYPR(KC_M) ,  _______, _______ , _______, _______,
+                                 _______, _______, _______, _______, _______, _______, HYPR(KC_SPACE), _______, _______, _______,
+         _______, _______, _______,                          _______, _______, _______, _______, _______, _______,          _______
     ),
 
      [_MYSTUFF] = LAYOUT_myr(
@@ -114,16 +113,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     /*
     *      1 2 3 4 5   6 7 8 9 0         
-    *        [ { ( +   - ) } ] |
-    *      ~ ` ' " =   _ | ; : \
+    *      ~ [ { ( -   + ) } ] |         
+    *      ? ` ' " _   = / ; : \         
     */
 
     [_SYM] = LAYOUT_myr(
-      _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______,
-      _______, _______, _______, _______, _______, KC_EQL ,           _______, _______,          S(KC_MINUS), _______, _______, _______, _______, _______,
-      _______, KC_PLUS, KC_LBRC, KC_LCBR, KC_LPRN, KC_PLUS,          _______, _______,         KC_MINUS, KC_RPRN, KC_RCBR, KC_RBRC, KC_MINUS,_______,
-      _______, _______, _______, _______, _______, KC_SCLN, _______, _______, _______, _______, KC_COLN, _______, _______, _______, _______, _______,
-                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______,          _______, _______,             _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, KC_EQL ,          _______, _______,             S(KC_MINUS), _______, _______, _______, _______, _______,
+      _______, KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN, KC_PLUS,          _______, _______,             KC_MINUS, KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,_______,
+      _______, _______, _______, _______, S(KC_QUOTE), S(KC_PLUS), _______, _______, _______, _______, S(KC_MINUS), KC_QUOTE, _______, _______, _______, _______,
+                                 _______, _______, _______,    _______, _______, _______, _______, KC_SCLN, KC_COLN, _______,
       _______, _______, _______, _______,          _______,                   _______, _______, _______, _______,          _______
     ),
      [_OSM] = LAYOUT(
@@ -196,7 +195,7 @@ uint16_t printSym(uint16_t posy)
         // plot_line(64,9.38+posy ,58,9.38+posy);
     }
 
-    return posy+25;
+   return posy+25;
 }
 
 uint16_t printCmd(uint16_t posy)
@@ -401,7 +400,7 @@ return true;
                 doScroll=true;
                 posy=printMouse(posy);
                 break;
-            case _QWERTY:
+            case _HYPR:
                 oled_write_P(PSTR("QWERTY\n"), false);
                 break;
             default:
@@ -427,6 +426,7 @@ return true;
         }
         if(get_oneshot_mods() & MOD_MASK_ALT)
         {
+
             posy+=8;
              oled_write_P(PSTR("ALT... "), false);
         }
