@@ -17,17 +17,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
     [0] = LAYOUT_3thumb(
-    LT(3,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
-    KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,     KC_N,  KC_E,    KC_I,   KC_O,
-    KC_Z,  MT(MOD_LALT,KC_X),   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, MT(MOD_LALT,KC_DOT),  KC_ENTER,
-                MT(MOD_LSFT,KC_ENTER),MT(MOD_LSFT,KC_ENTER),MT(MOD_LGUI,KC_ESC),       LT(1,KC_SPACE),MO(2),LT(2,KC_TAB)
+    KC_Q,  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
+    KC_A,  KC_S,   KC_R, KC_T,   MT(MOD_LGUI,KC_G),                     MT(MOD_LGUI,KC_M),     KC_N,  KC_E,    KC_I,   KC_O,
+    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
+    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
+    // KC_Z,  KC_X,   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, KC_DOT,  KC_SLSH,
+    KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  KC_SLSH,
+                MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB),LT(2,KC_TAB)
     ),
 
     [1] = LAYOUT_3thumb(
-         KC_ESC,  HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),   KC_MPLY,   KC_SPACE,  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
-         XXXXXXX, KC_PGDN,    S(KC_TAB),  KC_TAB,     VIM_CMD,                 KC_ESC,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
-         XXXXXXX, XXXXXXX,    XXXXXXX,    KC_DEL,     XXXXXXX,                 LGUI(KC_Z),S(LGUI(KC_Z)), KC_VOLD,  KC_VOLU,   KC_SLSH,
-                          KC_LALT, KC_LALT,  MT(MOD_LGUI,KC_SPACE),               _______, KC_MPLY, MO(5)
+         HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),   KC_MPLY,   HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
+         XXXXXXX,    HYPR(KC_LEFT),HYPR(KC_SPACE),HYPR(KC_RIGHT),     VIM_CMD,                 KC_ESC,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+         QK_BOOT,    XXXXXXX,    XXXXXXX,    LGUI(KC_Z),S(LGUI(KC_Z)),                KC_SPACE, KC_MPLY, KC_VOLD,  KC_VOLU,  XXXXXXX,
+                          _______, _______,  _______,               _______, _______,_______
     ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -39,15 +42,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [2] = LAYOUT_3thumb(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,      KC_MPLY,      KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
-         KC_BSLS, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_SLSH,
+         KC_BSLS, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
                            _______, _______,   _______,                 _______,  _______, _______
     ),
 
     [3] = LAYOUT_3thumb(
-        HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   KC_MPLY,HYPR(KC_J), HYPR(KC_L),    HYPR(KC_UP) ,  HYPR(KC_O),    HYPR(KC_P),
-        HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), _______,
-        HYPR(KC_Z), HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
-                           MO(5), _______, _______,                         HYPR(KC_SPACE),  _______, _______
+        HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   KC_MPLY,HYPR(KC_J), HYPR(KC_L),    HYPR(KC_UP) ,  HYPR(KC_Y),    _______,
+        HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), HYPR(KC_O),
+        QK_BOOT, HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
+                           _______,_______, _______,                         HYPR(KC_SPACE),  _______, _______
     ),
 
     [4] = LAYOUT_3thumb(
@@ -171,8 +174,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
         {
             case VIM_CMD:
                 tap_code(KC_ESC);
-                SEND_STRING(":w");
-                tap_code(KC_ENTER);
+                SEND_STRING(":");
+                // tap_code(KC_ENTER);
                 return false;
         }
     }
@@ -189,4 +192,60 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
 //             return 499;
 //     }
 // }
+
+#define IS_HOMEROW_MOD_TAP(kc) (              \
+    IS_QK_MOD_TAP(kc)                      && \
+    QK_MOD_TAP_GET_TAP_KEYCODE(kc) >= KC_A && \
+    QK_MOD_TAP_GET_TAP_KEYCODE(kc) <= KC_Z    )
+
+// Decision macro for preceding trigger key and typing interval
+#define IS_TYPING(k) ( \
+    ((uint8_t)(k) <= KC_Z ||(uint8_t)(k) == KC_SPC) && \
+    (last_input_activity_elapsed() < QUICK_TAP_TERM)    )
+
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    static bool     is_pressed[UINT8_MAX];
+    static uint16_t prev_keycode;
+    const  uint16_t tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+
+    if (record->event.pressed) {
+        // Press the tap keycode if the tap-hold key follows the previous key swiftly
+        if (IS_HOMEROW_MOD_TAP(keycode) && IS_TYPING(prev_keycode)) {
+            is_pressed[tap_keycode] = true;
+            record->keycode         = tap_keycode;
+        }
+        prev_keycode = keycode;
+    }
+
+    // Release the tap keycode if pressed
+    else if (is_pressed[tap_keycode]) {
+        is_pressed[tap_keycode] = false;
+        record->keycode         = tap_keycode;
+    }
+
+    return true;
+}
+
+
+
+
+
+
+
+// uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case LT(1, KC_SPACE):
+//             return 80;
+//         default:
+//             return TAPPING_TERM;
+//     }
+// }
+
+
+
+
+
+
+// bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) { switch(keycode) { case LT(1, KC_SPACE): return true; default: return false; } }
+
 
