@@ -17,12 +17,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
     [0] = LAYOUT_3thumb(
-    KC_Q,  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
-    KC_A,  KC_S,   KC_R, KC_T,   MT(MOD_LGUI,KC_G),                     MT(MOD_LGUI,KC_M),     KC_N,  KC_E,    KC_I,   KC_O,
-    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
-    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
-    // KC_Z,  KC_X,   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, KC_DOT,  KC_SLSH,
-    KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  KC_SLSH,
+        KC_Q,  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
+        KC_A,  KC_S,   KC_R, KC_T,   MT(MOD_LGUI,KC_G),                     MT(MOD_LGUI,KC_M),     KC_N,  KC_E,    KC_I,   KC_O,
+        // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
+        // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
+        // KC_Z,  KC_X,   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, KC_DOT,  KC_SLSH,
+        KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  KC_SLSH,
                 MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB),LT(2,KC_TAB)
     ),
 
@@ -74,7 +74,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       )
 };
 
-
+const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
+    LAYOUT_3thumb(
+         'L', 'L', 'L', 'L', 'L','*',  'R', 'R', 'R', 'R', 'R',
+         'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R',
+         'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R',
+                       '*', '*', '*',  '*', '*', '*'
+    );
 
 // Encoder Map
 #ifdef ENCODER_MAP_ENABLE
