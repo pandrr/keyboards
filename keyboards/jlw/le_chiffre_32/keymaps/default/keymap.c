@@ -1,35 +1,31 @@
 #include QMK_KEYBOARD_H
 
+const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
+combo_t key_combos[] = {
+    COMBO(combo_boot, QK_BOOT),
+};
 
 enum custom_keycodes {
     VIM_CMD = SAFE_RANGE
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    // [0] = LAYOUT_3thumb(
-    // //  #######  #######  #######  #######  #######            #######  #######  #######  #######  #######
-    //     KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,    KC_MPLY,   KC_J,    KC_L,    KC_U,    KC_Y,    KC_BSPC,
-    //     HO_A,    HO_S,    HO_R,    HO_T,    KC_G,              KC_M,    HO_N,    HO_E,    HO_I,    HO_O,
-    //     HO_Z,    KC_X,    KC_C,    KC_D,    KC_V,              KC_K,    KC_H,    KC_COMM, KC_DOT,  HO_SLSH,
-    //                       MO(3), ESCMD,   KC_BSPC,             KC_SPACE,LT(5,KC_ENTER),  MO(2)
-    // //  #######  #######  #######  #######  #######     #######  #######  #######  #######  #######
-    // ),
-
 
     [0] = LAYOUT_3thumb(
         KC_Q,  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
         KC_A,  KC_S,   KC_R, KC_T,   MT(MOD_LGUI,KC_G),                     MT(MOD_LGUI,KC_M),     KC_N,  KC_E,    KC_I,   KC_O,
-        // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
-        // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
-        // KC_Z,  KC_X,   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, KC_DOT,  KC_SLSH,
         KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  KC_SLSH,
                 MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB),LT(2,KC_TAB)
     ),
 
+    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
+    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
+    // KC_Z,  KC_X,   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, KC_DOT,  KC_SLSH,
+
     [1] = LAYOUT_3thumb(
          HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),   KC_MPLY,   HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
          XXXXXXX,    HYPR(KC_LEFT),HYPR(KC_SPACE),HYPR(KC_RIGHT),     VIM_CMD,                 KC_ESC,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
-         QK_BOOT,    XXXXXXX,    XXXXXXX,    LGUI(KC_Z),S(LGUI(KC_Z)),                KC_SPACE, KC_MPLY, KC_VOLD,  KC_VOLU,  XXXXXXX,
+         QK_BOOT,    XXXXXXX,    XXXXXXX,    LGUI(KC_Z),S(LGUI(KC_Z)),                KC_SPACE, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
                           _______, _______,  _______,               _______, _______,_______
     ),
     /*
@@ -39,6 +35,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *
      *      !@#$%    ^&*()
      */
+
     [2] = LAYOUT_3thumb(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,      KC_MPLY,      KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
@@ -49,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [3] = LAYOUT_3thumb(
         HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   KC_MPLY,HYPR(KC_J), HYPR(KC_L),    HYPR(KC_UP) ,  HYPR(KC_Y),    _______,
         HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), HYPR(KC_O),
-        QK_BOOT, HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
+        HYPR(KC_Z), HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
                            _______,_______, _______,                         HYPR(KC_SPACE),  _______, _______
     ),
 
@@ -92,84 +89,86 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
         [4] =   { ENCODER_CCW_CW(_______, _______) },
         [5] =   { ENCODER_CCW_CW(_______, _______) },
         [6] =   { ENCODER_CCW_CW(_______, _______) }
-    };
+   };
 #endif
 
-led_config_t g_led_config = {
-    // Key Matrix to LED Index
-    {
-         {9,     9,    9,   9,    9,            3, 3, 3,    3,     3 },
-         {10,    10,   10,  10,   10,           2, 2, 2,    2,     2 },
-         {8,     8,    8,   8,    8,            4, 4, 4,    4,     4 },
-         {NO_LED, NO_LED, 7, NO_LED,      6,    6, 6, 5, NO_LED, NO_LED, }
-    },
-    // LED Index to Physical Positon
-    {
-        { 128, 40 },
-        { 128, 30 },
-        { 166, 0 },
-        { 255, 0 },
-        { 255, 48 },
-        { 178, 64 },
-        { 128, 64 },
-        { 77, 64 },
-        { 0, 48 },
-        { 0, 0 },
-        { 115, 0 }
-    },
-    //  LED Index to Flag
-    //  https://docs.qmk.fm/#/feature_rgb_matrix?id=flags
-    { 8, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2 }
-};
+// led_config_t g_led_config = {
+//     // Key Matrix to LED Index
+//     {
+//          {9,     9,    9,   9,    9,            3, 3, 3,    3,     3 },
+//          {10,    10,   10,  10,   10,           2, 2, 2,    2,     2 },
+//          {8,     8,    8,   8,    8,            4, 4, 4,    4,     4 },
+//          {NO_LED, NO_LED, 7, NO_LED,      6,    6, 6, 5, NO_LED, NO_LED, }
+//     },
+//     // LED Index to Physical Positon
+//     {
+//         { 128, 40 },
+//         { 128, 30 },
+//         { 166, 0 },
+//         { 255, 0 },
+//         { 255, 48 },
+//         { 178, 64 },
+//         { 128, 64 },
+//         { 77, 64 },
+//         { 0, 48 },
+//         { 0, 0 },
+//         { 115, 0 }
+//     },
+//     //  LED Index to Flag
+//     //  https://docs.qmk.fm/#/feature_rgb_matrix?id=flags
+//     { 8, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2 }
+// };
 // RGB settings for indicator lights
 // Layer and Mods indicator
-#define LED_CENTER_TOP 1
-#define LED_CENTER_BOTTOM 0
+// #define LED_CENTER_TOP 1
+// #define LED_CENTER_BOTTOM 0
 
-#define LAYER_R layer_colors[layer][0] *  RGB_INDICATOR_BRIGHTNESS / 255
-#define LAYER_G layer_colors[layer][1] *  RGB_INDICATOR_BRIGHTNESS / 255
-#define LAYER_B layer_colors[layer][2] *  RGB_INDICATOR_BRIGHTNESS / 255
 
-#define MODS_ACTIVE(mods) \
-    ((get_mods()|get_oneshot_mods()) & MOD_MASK_##mods ? RGB_INDICATOR_BRIGHTNESS:0)
-#define SHIFT_ACTIVE (get_mods() & MOD_MASK_SHIFT ? RGB_INDICATOR_BRIGHTNESS/4:0)
-#define MODS_R MODS_ACTIVE(CTRL) + SHIFT_ACTIVE
-#define MODS_G MODS_ACTIVE(GUI) + SHIFT_ACTIVE
-#define MODS_B MODS_ACTIVE(ALT) + SHIFT_ACTIVE
+// #define LAYER_R layer_colors[layer][0] *  RGB_INDICATOR_BRIGHTNESS / 255
+// #define LAYER_G layer_colors[layer][1] *  RGB_INDICATOR_BRIGHTNESS / 255
+// #define LAYER_B layer_colors[layer][2] *  RGB_INDICATOR_BRIGHTNESS / 255
 
-const uint8_t PROGMEM layer_colors[][3] = {
-    {RGB_OFF},
-    {RGB_RED},
-    {RGB_GREEN},
-    {RGB_BLUE},
-    {RGB_YELLOW},
-    {RGB_PURPLE},
-    {RGB_PINK},
-    {RGB_TEAL},
-    {RGB_TEAL}
-};
+// #define MODS_ACTIVE(mods)  ((get_mods()|get_oneshot_mods()) & MOD_MASK_##mods ? RGB_INDICATOR_BRIGHTNESS:0)
+// #define SHIFT_ACTIVE (get_mods() & MOD_MASK_SHIFT ? RGB_INDICATOR_BRIGHTNESS/4:0)
+// #define MODS_R MODS_ACTIVE(CTRL) + SHIFT_ACTIVE
+// #define MODS_G MODS_ACTIVE(GUI) + SHIFT_ACTIVE
+// #define MODS_B MODS_ACTIVE(ALT) + SHIFT_ACTIVE
 
-void set_rgb_matrix_indicators(uint8_t led_min, uint8_t led_max) {
-    #if defined(RGB_LAYER_INDICATOR_ENABLE)
-    int layer = get_highest_layer(layer_state|default_layer_state);
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, LAYER_R, LAYER_G, LAYER_B);
-    /* uprintf("layer RGB: (%u, %u, %u)\n", LAYER_R, LAYER_G, LAYER_B); */
-    #else
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, 0, 0, 0);
-    #endif
+// const uint8_t PROGMEM layer_colors[][3] = {
+//     {RGB_OFF},
+//     {RGB_RED},
+//     {RGB_GREEN},
+//     {RGB_BLUE},
+//     {RGB_YELLOW},
+//     {RGB_PURPLE},
+//     {RGB_PINK},
+//     {RGB_TEAL},
+//     {RGB_TEAL}
+// };
 
-    #if defined(RGB_MODS_INDICATOR_ENABLE)
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, MODS_R, MODS_G, MODS_B);
-    /* uprintf("mod RGB: (%u, %u, %u)\n", MODS_R, MODS_G, MODS_B); */
-    #else
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, 0, 0, 0);
-    #endif
-}
+// void set_rgb_matrix_indicators(uint8_t led_min, uint8_t led_max) {
+//     #if defined(RGB_LAYER_INDICATOR_ENABLE)
+//     int layer = get_highest_layer(layer_state|default_layer_state);
+//     RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, LAYER_R, LAYER_G, LAYER_B);
+//     /* uprintf("layer RGB: (%u, %u, %u)\n", LAYER_R, LAYER_G, LAYER_B); */
+//     #else
+//     RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, 255, 0, 0);
+//     #endif
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    set_rgb_matrix_indicators(led_min, led_max);
-    return false;
-}
+//     #if defined(RGB_MODS_INDICATOR_ENABLE)
+//     RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, MODS_R, MODS_G, MODS_B);
+//     /* uprintf("mod RGB: (%u, %u, %u)\n", MODS_R, MODS_G, MODS_B); */
+//     #else
+//     RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, 0, 0, 0);
+//     #endif
+//     RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, 255, 0, 0);
+//     RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, 255, 0, 0);
+// }
+
+// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+//     set_rgb_matrix_indicators(led_min, led_max);
+//     return false;
+// }
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record)
 {
@@ -213,7 +212,6 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     static bool     is_pressed[UINT8_MAX];
     static uint16_t prev_keycode;
     const  uint16_t tap_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-
     if (record->event.pressed) {
         // Press the tap keycode if the tap-hold key follows the previous key swiftly
         if (IS_HOMEROW_MOD_TAP(keycode) && IS_TYPING(prev_keycode)) {
@@ -234,24 +232,23 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 
-
-
-
-
 // uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 //     switch (keycode) {
-//         case LT(1, KC_SPACE):
-//             return 80;
+//         case MT(MOD_LGUI, KC_ENTER):
+//             return 100;
 //         default:
 //             return TAPPING_TERM;
 //     }
 // }
 
-
-
-
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case MT(MOD_LGUI, KC_ENTER): return true; // Immediately select the hold action when another key is pressed.
+        case LT(1, KC_SPACE): return true; // Immediately select the hold action when another key is pressed.
+        default: return false; // Do not select the hold action when another key is pressed.
+    }
+}
 
 
 // bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) { switch(keycode) { case LT(1, KC_SPACE): return true; default: return false; } }
-
 
