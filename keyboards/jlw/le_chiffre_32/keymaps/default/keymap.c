@@ -12,9 +12,9 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [0] = LAYOUT_3thumb(
-        KC_Q,  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
-        KC_A,  KC_S,   KC_R, KC_T,   MT(MOD_LGUI,KC_G),                     MT(MOD_LGUI,KC_M),     KC_N,  KC_E,    KC_I,   KC_O,
-        KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  KC_SLSH,
+        LT(3,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
+        KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,     KC_N,  KC_E,    KC_I,   KC_O,
+        KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  LT(4,KC_SLSH),
                 MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB),LT(2,KC_TAB)
     ),
 
@@ -24,9 +24,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [1] = LAYOUT_3thumb(
          HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),   KC_MPLY,   HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
-         XXXXXXX,    HYPR(KC_LEFT),HYPR(KC_SPACE),HYPR(KC_RIGHT),     VIM_CMD,                 KC_ESC,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
-         QK_BOOT,    XXXXXXX,    XXXXXXX,    LGUI(KC_Z),S(LGUI(KC_Z)),                KC_SPACE, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
-                          _______, _______,  _______,               _______, _______,_______
+         XXXXXXX,    HYPR(KC_LEFT),HYPR(KC_SPACE),LGUI(KC_GRV),     VIM_CMD,                 KC_PGUP,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+         XXXXXXX,    XXXXXXX,    XXXXXXX,    S(LGUI(KC_Z)),LGUI(KC_Z),                KC_PGDN, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
+                          _______, _______,  _______,               XXXXXXX, MS_BTN1, _______
     ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -35,45 +35,50 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *
      *      !@#$%    ^&*()
      */
-
     [2] = LAYOUT_3thumb(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,      KC_MPLY,      KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
          KC_BSLS, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
-                           _______, _______,   _______,                 _______,  _______, _______
+                           _______, _______,   _______,                 MS_BTN2,  XXXXXXX, _______
     ),
 
     [3] = LAYOUT_3thumb(
-        HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   KC_MPLY,HYPR(KC_J), HYPR(KC_L),    HYPR(KC_UP) ,  HYPR(KC_Y),    _______,
+        _______, _______, _______, _______, _______,   _______,   _______, _______, MS_UP, _______, QK_BOOT,
+        _______, _______, _______, MS_BTN1, MS_BTN2,              _______, MS_LEFT, MS_DOWN, MS_RGHT, _______,
+        _______, _______, _______, MS_BTN3, _______,              _______, _______, _______, _______, _______,
+                          _______, _______, _______,              _______, _______, _______
+      ),
+    [4] = LAYOUT_3thumb(
+        HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   KC_MPLY,HYPR(KC_J), HYPR(KC_L),    HYPR(KC_SPACE) ,  HYPR(KC_Y),    _______,
         HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), HYPR(KC_O),
-        HYPR(KC_Z), HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
+        QK_BOOT, HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
                            _______,_______, _______,                         HYPR(KC_SPACE),  _______, _______
     ),
 
-    [4] = LAYOUT_3thumb(
-         S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5),    KC_MPLY,    S(KC_6),  S(KC_7), S(KC_8), S(KC_9), S(KC_0),
-         KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                   KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
-         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
-                          _______, _______, _______,                  _______, _______, _______
-    ),
+    // [4] = LAYOUT_3thumb(
+    //      S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5),    KC_MPLY,    S(KC_6),  S(KC_7), S(KC_8), S(KC_9), S(KC_0),
+    //      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                   KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
+    //      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
+    //                       _______, _______, _______,                  _______, _______, _______
+    // ),
 
-    [5] = LAYOUT_3thumb(
-        QK_BOOT, _______, _______, _______, _______,   KC_MPLY,   _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
-                          _______, _______, _______,              _______, _______, _______
-      ),
-    [6] = LAYOUT_3thumb(
-    KC_Q,  KC_W,   KC_F, KC_P,  KC_B,       KC_MPLY,      KC_J,   KC_L,    KC_U,    KC_Y,   KC_BSPC,
-    KC_A,  KC_S,   KC_R, KC_T,  KC_G,                     KC_M,   KC_N,    KC_E,    KC_I,   KC_O,
-    KC_Z,  KC_X,   KC_C, KC_D,  KC_V,         KC_K,       KC_H,   KC_COMM, KC_DOT,  KC_ENTER,
-                          KC_LSFT, KC_LSFT, KC_ESC,              KC_SPACE, MO(1), MO(2)
-      )
+    // [5] = LAYOUT_3thumb(
+    //     QK_BOOT, _______, _______, _______, _______,   KC_MPLY,   _______, _______, _______, _______, _______,
+    //     _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
+    //     _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
+    //                       _______, _______, _______,              _______, _______, _______
+    //   ),
+    // [6] = LAYOUT_3thumb(
+    // KC_Q,  KC_W,   KC_F, KC_P,  KC_B,       KC_MPLY,      KC_J,   KC_L,    KC_U,    KC_Y,   KC_BSPC,
+    // KC_A,  KC_S,   KC_R, KC_T,  KC_G,                     KC_M,   KC_N,    KC_E,    KC_I,   KC_O,
+    // KC_Z,  KC_X,   KC_C, KC_D,  KC_V,         KC_K,       KC_H,   KC_COMM, KC_DOT,  KC_ENTER,
+    //                       KC_LSFT, KC_LSFT, KC_ESC,              KC_SPACE, MO(1), MO(2)
+    //   )
 };
 
 const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
     LAYOUT_3thumb(
-         'L', 'L', 'L', 'L', 'L','*',  'R', 'R', 'R', 'R', 'R',
+         '*', 'L', 'L', 'L', 'L','*',  'R', 'R', 'R', 'R', 'R',
          'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R',
          'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R',
                        '*', '*', '*',  '*', '*', '*'
@@ -87,8 +92,8 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
         [2] =   { ENCODER_CCW_CW(_______, _______) },
         [3] =   { ENCODER_CCW_CW(_______, _______) },
         [4] =   { ENCODER_CCW_CW(_______, _______) },
-        [5] =   { ENCODER_CCW_CW(_______, _______) },
-        [6] =   { ENCODER_CCW_CW(_______, _______) }
+        // [5] =   { ENCODER_CCW_CW(_______, _______) },
+        // [6] =   { ENCODER_CCW_CW(_______, _______) }
    };
 #endif
 
@@ -243,8 +248,9 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        // case LT(3, KC_Q): return true; // Immediately select the hold action when another key is pressed.
         case MT(MOD_LGUI, KC_ENTER): return true; // Immediately select the hold action when another key is pressed.
-        case LT(1, KC_SPACE): return true; // Immediately select the hold action when another key is pressed.
+        case MT(MOD_LSFT, KC_ESC): return true; // Immediately select the hold action when another key is pressed.
         default: return false; // Do not select the hold action when another key is pressed.
     }
 }
