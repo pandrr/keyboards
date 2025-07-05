@@ -18,13 +18,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB),LT(2,KC_TAB)
     ),
 
-    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
-    // MT(MOD_LALT,KC_A), MT(MOD_LCTL, KC_S), MT(MOD_LSFT,KC_R), MT(MOD_LGUI,KC_T),   KC_G, KC_M,  MT(MOD_LGUI, KC_N), MT(MOD_LSFT,KC_E), MT(MOD_LCTL, KC_I),  MT(MOD_LALT, KC_O),
-    // KC_Z,  KC_X,   KC_C, KC_D,  MT(MOD_LCTL,KC_V),         MT(MOD_LCTL,KC_K),     KC_H,  KC_COMM, KC_DOT,  KC_SLSH,
-
     [1] = LAYOUT_3thumb(
          HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),   KC_MPLY,   HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
-         XXXXXXX,    HYPR(KC_LEFT),HYPR(KC_SPACE),LGUI(KC_GRV),     VIM_CMD,                 KC_PGUP,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+         S(KC_TAB),KC_TAB,KC_ESC,KC_ENTER,     VIM_CMD,                 KC_PGUP,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
          XXXXXXX,    XXXXXXX,    XXXXXXX,    S(LGUI(KC_Z)),LGUI(KC_Z),                KC_PGDN, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
                           _______, _______,  _______,               XXXXXXX, MS_BTN1, _______
     ),
