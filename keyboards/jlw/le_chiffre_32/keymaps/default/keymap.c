@@ -1,4 +1,6 @@
 #include QMK_KEYBOARD_H
+#include "os_detection.h"
+#include "deferred_exec.h"
 
 const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
 combo_t key_combos[] = {
@@ -9,20 +11,31 @@ enum custom_keycodes {
     VIM_CMD = SAFE_RANGE
 };
 
+enum layers {
+    DEFAULT,
+    LNAV,
+    LSYM,
+    LUI,
+    LCFG
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [0] = LAYOUT_3thumb(
-        LT(3,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,       KC_MPLY,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
+    [DEFAULT] = LAYOUT_3thumb(
+        LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,       _______,      KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
         KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,     KC_N,  KC_E,    KC_I,   KC_O,
-        KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  LT(4,KC_SLSH),
-                MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB),LT(2,KC_TAB)
+        KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  LT(LUI,KC_SLSH),
+                // MT(MOD_LSFT,KC_ESC),KC_ESC,KC_ENTER,       KC_SPACE,KC_TAB,LT(2,KC_TAB)
+                MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
+                // MT(MOD_LSFT,KC_ESC),KC_LSFT,MT(MOD_LGUI,KC_SPACE),       MO(1),MO(2),LT(2,KC_TAB)
+                // KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),MO(2),MO(2)
     ),
 
-    [1] = LAYOUT_3thumb(
-         HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),   KC_MPLY,   HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
-         S(KC_TAB),KC_TAB,KC_ESC,KC_ENTER,     VIM_CMD,                 KC_PGUP,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
-         XXXXXXX,    XXXXXXX,    XXXXXXX,    S(LGUI(KC_Z)),LGUI(KC_Z),                KC_PGDN, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
-                          _______, _______,  _______,               XXXXXXX, MS_BTN1, _______
+    [LNAV] = LAYOUT_3thumb(
+         HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3),    HYPR(KC_4),   _______,   KC_PGUP,  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
+         KC_ESC,    OS_LSFT,  LSFT(KC_TAB)  ,  KC_TAB,HYPR(KC_5)       ,                  KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+         XXXXXXX,    XXXXXXX,  XXXXXXX,    S(LGUI(KC_Z)), LGUI(KC_Z),              OS_LALT, OS_LCTL, KC_VOLD,  KC_VOLU,  KC_ESC,
+                          _______,KC_LSFT, KC_LGUI,                                XXXXXXX, _______, _______
     ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -31,45 +44,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *
      *      !@#$%    ^&*()
      */
-    [2] = LAYOUT_3thumb(
+    [LSYM] = LAYOUT_3thumb(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,      KC_MPLY,      KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
-         KC_BSLS, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
-                           _______, _______,   _______,                 MS_BTN2,  XXXXXXX, _______
+         XXXXXXX, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
+                           _______, _______,   _______,                  MS_BTN2,  XXXXXXX, _______
     ),
 
-    [3] = LAYOUT_3thumb(
-        _______, _______, _______, _______, _______,   _______,   _______, _______, MS_UP, _______, QK_BOOT,
-        _______, _______, _______, MS_BTN1, MS_BTN2,              _______, MS_LEFT, MS_DOWN, MS_RGHT, _______,
-        _______, _______, _______, MS_BTN3, _______,              _______, _______, _______, _______, _______,
+    [LUI] = LAYOUT_3thumb(
+        XXXXXXX, LCTL(LSFT(KC_TAB)), LALT(KC_UP), LCTL(KC_TAB), LGUI(KC_GRV), XXXXXXX,XXXXXXX, LGUI(KC_TAB),    HYPR(KC_SPACE) ,   LGUI(S(KC_TAB)),    _______,
+        XXXXXXX, LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_RIGHT), XXXXXXX,           XXXXXXX, HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), XXXXXXX,
+        MO(LCFG), XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN2,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX,
+                           _______,MS_BTN3, MS_BTN1,                         XXXXXXX,  _______, _______
+    ),
+
+    // backspace - flash
+    // m - mac mode
+    // w - win mode
+    [LCFG] = LAYOUT_3thumb(
+        _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______, _______,   _______,   _______, _______, _______, _______, QK_BOOT,
+        _______, _______, _______, _______, _______,              QK_MAGIC_UNSWAP_CTL_GUI, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
                           _______, _______, _______,              _______, _______, _______
-      ),
-    [4] = LAYOUT_3thumb(
-        HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   KC_MPLY,HYPR(KC_J), HYPR(KC_L),    HYPR(KC_SPACE) ,  HYPR(KC_Y),    _______,
-        HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), HYPR(KC_O),
-        QK_BOOT, HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
-                           _______,_______, _______,                         HYPR(KC_SPACE),  _______, _______
-    ),
+      )
 
-    // [4] = LAYOUT_3thumb(
-    //      S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5),    KC_MPLY,    S(KC_6),  S(KC_7), S(KC_8), S(KC_9), S(KC_0),
-    //      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                   KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
-    //      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
-    //                       _______, _______, _______,                  _______, _______, _______
-    // ),
-
-    // [5] = LAYOUT_3thumb(
-    //     QK_BOOT, _______, _______, _______, _______,   KC_MPLY,   _______, _______, _______, _______, _______,
-    //     _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
-    //     _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
-    //                       _______, _______, _______,              _______, _______, _______
-    //   ),
-    // [6] = LAYOUT_3thumb(
-    // KC_Q,  KC_W,   KC_F, KC_P,  KC_B,       KC_MPLY,      KC_J,   KC_L,    KC_U,    KC_Y,   KC_BSPC,
-    // KC_A,  KC_S,   KC_R, KC_T,  KC_G,                     KC_M,   KC_N,    KC_E,    KC_I,   KC_O,
-    // KC_Z,  KC_X,   KC_C, KC_D,  KC_V,         KC_K,       KC_H,   KC_COMM, KC_DOT,  KC_ENTER,
-    //                       KC_LSFT, KC_LSFT, KC_ESC,              KC_SPACE, MO(1), MO(2)
-    //   )
 };
 
 const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
@@ -171,6 +169,7 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
 //     return false;
 // }
 
+
 bool process_record_user(uint16_t keycode, keyrecord_t* record)
 {
 
@@ -242,15 +241,34 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 //     }
 // }
 
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record)
+{
+    // if(last_input_activity_elapsed() < QUICK_TAP_TERM) return false;
+
     switch (keycode) {
-        // case LT(3, KC_Q): return true; // Immediately select the hold action when another key is pressed.
-        case MT(MOD_LGUI, KC_ENTER): return true; // Immediately select the hold action when another key is pressed.
-        case MT(MOD_LSFT, KC_ESC): return true; // Immediately select the hold action when another key is pressed.
-        default: return false; // Do not select the hold action when another key is pressed.
+        case LT(1, KC_SPACE):if(last_input_activity_elapsed() < QUICK_TAP_TERM) return true;
+            return false;
+        case MT(MOD_LGUI, KC_ENTER): return true;
+        case MT(MOD_LSFT, KC_ESC): return true;
+        default: return false;
     }
 }
 
 
-// bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) { switch(keycode) { case LT(1, KC_SPACE): return true; default: return false; } }
+// switch ctrl/cmd automatically
+uint32_t os_swap_ctrl_gui(uint32_t trigger_time, void *cb_arg) {
+    os_variant_t os = detected_host_os();
 
+    if (os == OS_MACOS) {
+        keymap_config.swap_lctl_lgui = true;  // Swap CTRL and GUI on Mac
+        keymap_config.swap_rctl_rgui = true;
+    } else {
+        keymap_config.swap_lctl_lgui = false; // Normal for Windows/Linux
+        keymap_config.swap_rctl_rgui = false;
+    }
+
+    return 0; // End the deferred execution
+}
+void keyboard_post_init_user(void) {
+    defer_exec(100, os_swap_ctrl_gui, NULL); // Wait 100ms for OS detection
+}

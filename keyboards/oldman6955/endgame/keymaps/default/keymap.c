@@ -1,5 +1,7 @@
 #include QMK_KEYBOARD_H
 
+
+
 const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
 combo_t key_combos[] = {
     COMBO(combo_boot, QK_BOOT),
@@ -64,7 +66,7 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
     ((uint8_t)(k) <= KC_Z ||(uint8_t)(k) == KC_SPC) && \
     (last_input_activity_elapsed() < QUICK_TAP_TERM)    )
 
-#define MY_SONG  W__NOTE(_C2)
+#define MY_SONG  W__NOTE(_D4)
 
 float my_song[][2] = SONG(MY_SONG);
 uint8_t oldlayer=0;
@@ -103,18 +105,43 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+#define COL_BLACK          0,   0,   0
+#define COL_AZURE        132, 102,150
+#define COL_BLUE         170, 255,150
+#define COL_CHARTREUSE    64, 255,150
+#define COL_CORAL         11, 176,150
+#define COL_CYAN         128, 255,150
+#define COL_GOLD          36, 255,150
+#define COL_GOLDENROD     30, 218,150
+#define COL_GREEN         85, 255,150
+#define COL_MAGENTA      213, 255,150
+#define COL_ORANGE        21, 255,150
+#define COL_PINK         234, 128,150
+#define COL_PURPLE       191, 255,150
+#define COL_RED            0, 255,150
+#define COL_SPRINGGREEN  106, 255,150
+#define COL_TEAL         128, 255,150
+#define COL_TURQUOISE    123,  90,150
+#define COL_WHITE          0,   0,150
+#define COL_YELLOW        43, 255,150
+#define COL_OFF          HSV_BLACK
 
 void set_rgblight_by_layer(uint32_t layer) {
     for (int i = 0; i < led_count; i++) {
         switch (layer) {
             case 1:
-                rgb_matrix_set_color(leds[i], RGB_PURPLE);
+                rgb_matrix_sethsv(COL_PURPLE);
                 break;
             case 2:
-                rgb_matrix_set_color(leds[i], RGB_RED);
+                rgb_matrix_sethsv(COL_RED);
+                break;
+            case 3:
+            case 4:
+            case 5:
+                rgb_matrix_sethsv(COL_BLUE);
                 break;
             default:
-                rgb_matrix_set_color(leds[i], RGB_SPRINGGREEN);
+                rgb_matrix_sethsv(COL_OFF);
                 break;
         }
     }
@@ -128,6 +155,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     set_rgblight_by_layer(biton32(state));
     return state;
 }
+
 
 bool rgb_matrix_indicators_user(void) {
     uint8_t mods                = get_mods();
@@ -146,21 +174,21 @@ bool rgb_matrix_indicators_user(void) {
             // rgb_matrix_set_color(leds[i], RGB_YELLOW);
         // } else
          if (isShift) {
-            rgb_matrix_set_color(leds[i], RGB_TEAL);
+            rgb_matrix_sethsv( COL_TEAL);
         } else if (isCtrl || isAlt || isGui) {
-            rgb_matrix_set_color(leds[i], RGB_WHITE);
+            rgb_matrix_sethsv( COL_WHITE);
         } else {
             set_current_layer_rgb();
         }
     }
 
-    uint8_t layer = biton32(layer_state);
-    if(layer!=oldlayer&&layer!=0)
-    {
-        audio_set_tempo(255);
-        PLAY_SONG(my_song);
-    }
-    oldlayer=layer;
+    // uint8_t layer = biton32(layer_state);
+    // if(layer!=oldlayer&&layer!=0)
+    // {
+    //     audio_set_tempo(255);
+    //     PLAY_SONG(my_song);
+    // }
+    // oldlayer=layer;
 
     return true;
 }
