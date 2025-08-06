@@ -246,7 +246,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record)
     // if(last_input_activity_elapsed() < QUICK_TAP_TERM) return false;
 
     switch (keycode) {
-        case LT(1, KC_SPACE):if(last_input_activity_elapsed() < QUICK_TAP_TERM) return true;
+        case LT(1, KC_SPACE):if(last_input_activity_elapsed() > QUICK_TAP_TERM) return true;
             return false;
         case MT(MOD_LGUI, KC_ENTER): return true;
         case MT(MOD_LSFT, KC_ESC): return true;
