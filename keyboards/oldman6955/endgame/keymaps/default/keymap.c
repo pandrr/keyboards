@@ -1,25 +1,62 @@
 #include QMK_KEYBOARD_H
+#include "os_detection.h"
+#include "deferred_exec.h"
 
 
-
-const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
-combo_t key_combos[] = {
-    COMBO(combo_boot, QK_BOOT),
+enum layers {
+    DEFAULT,
+    LNAV,
+    LSYM,
+    LUI,
+    LCFG
 };
 
- const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT_eg(
-        LT(3,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,             KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
-        KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,     KC_N,  KC_E,    KC_I,   KC_O,
-        KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  LT(4,KC_SLSH),
-                _______,  MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB), _______
+const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo_os_alt[] = {KC_H, KC_K, COMBO_END};
+const uint16_t PROGMEM combo_os_gui[] = {KC_M, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_os_altgui[] = {KC_T, KC_G, COMBO_END};
+
+const uint16_t PROGMEM combo_leaderkey[] = {KC_J, KC_L, COMBO_END};
+const uint16_t PROGMEM combo_undo[] = {KC_L, KC_U, COMBO_END};
+const uint16_t PROGMEM combo_yank[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM combo_paste[] = {KC_F, KC_P, COMBO_END};
+const uint16_t PROGMEM combo_sym[] = {KC_R, KC_T, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(combo_boot, QK_BOOT),
+    COMBO(combo_os_ctl, OS_LCTL),
+    COMBO(combo_os_alt, OS_LALT),
+    COMBO(combo_os_gui, OS_LGUI),
+    COMBO(combo_os_altgui,OS_LAG),
+    COMBO(combo_leaderkey, KC_F13),
+    COMBO(combo_undo, LGUI(KC_Z)),
+    COMBO(combo_yank, LGUI(KC_C)),
+    COMBO(combo_paste, LGUI(KC_V)),
+    COMBO(combo_sym,OSL(LSYM)),
+};
+
+
+
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+
+    [DEFAULT] = LAYOUT_eg(
+        LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,     KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
+        KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
+        KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                      KC_K,  KC_H, KC_COMM, KC_DOT,  LT(LUI,KC_SLSH),
+                // MT(MOD_LSFT,KC_ESC),KC_ESC,KC_ENTER,       KC_SPACE,KC_TAB,LT(2,KC_TAB)
+                MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
+                // MT(MOD_LSFT,KC_ESC),KC_LSFT,MT(MOD_LGUI,KC_SPACE),       MO(1),MO(2),LT(2,KC_TAB)
+                // KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),MO(2),MO(2)
     ),
 
-    [1] = LAYOUT_eg(
-         HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),      HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
-         S(KC_TAB),KC_TAB,KC_ESC,KC_ENTER,     KC_ESC,                 KC_PGUP,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
-         XXXXXXX,    XXXXXXX,    XXXXXXX,    S(LGUI(KC_Z)),LGUI(KC_Z),                KC_PGDN, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
- _______,                            _______,  _______,               XXXXXXX, MS_BTN1 , _______    ),
+    [LNAV] = LAYOUT_eg(
+         _______, _______, _______, _______,    _______,      KC_PGUP,  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
+         KC_ESC,    OS_LSFT,  LSFT(KC_TAB),  KC_TAB,HYPR(KC_5)       ,                  KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+         XXXXXXX,    XXXXXXX,  XXXXXXX,    KC_LCTL, KC_LALT,              KC_LALT, KC_LCTL, KC_VOLD,  KC_VOLU,  KC_ESC,
+                          _______,KC_LSFT,KC_ENTER,                                XXXXXXX, _______, _______
+    ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
      *      ~ [ { ( -   + ) } ] |
@@ -27,23 +64,75 @@ combo_t key_combos[] = {
      *
      *      !@#$%    ^&*()
      */
-    [2] = LAYOUT_eg(
+    [LSYM] = LAYOUT_eg(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
-         KC_BSLS, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
-           _______,                  _______, _______,                    MS_BTN2,  XXXXXXX , _______    ),
+         XXXXXXX, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
+                           _______, _______,   _______,                  MS_BTN2,  XXXXXXX, _______
+    ),
 
-    [3] = LAYOUT_eg(
-        XXXXXXX, _______, _______, _______, _______,      _______, _______, MS_UP, _______, QK_BOOT,
-        _______, _______, _______, MS_BTN1, MS_BTN2,              _______, MS_LEFT, MS_DOWN, MS_RGHT, _______,
-        _______, _______, _______, MS_BTN3, _______,              _______, _______, _______, _______, _______,
-                         _______,  _______, QK_AUDIO_TOGGLE,               QK_MUSIC_TOGGLE, QK_AUDIO_CLICKY_TOGGLE	 ,_______      ),
-    [4] = LAYOUT_eg(
-        HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   HYPR(KC_J), HYPR(KC_L),    HYPR(KC_SPACE) ,  HYPR(KC_Y),    _______,
-        HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), HYPR(KC_O),
-        QK_BOOT, HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
-                     _______,        _______,_______,                          HYPR(KC_SPACE),   _______,_______
-    )};
+    [LUI] = LAYOUT_eg(
+        XXXXXXX, LCTL(LSFT(KC_TAB)), LALT(KC_UP), LCTL(KC_TAB), LGUI(KC_GRV), XXXXXXX, LGUI(KC_TAB),    HYPR(KC_SPACE) ,   LGUI(S(KC_TAB)),    _______,
+        XXXXXXX, LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_RIGHT), XXXXXXX,           XXXXXXX, HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), XXXXXXX,
+        MO(LCFG), XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN2,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX,
+                           _______,MS_BTN3, MS_BTN1,                         XXXXXXX,  _______, _______
+    ),
+
+    // backspace - flash
+    // m - mac mode
+    // w - win mode
+    [LCFG] = LAYOUT_eg(
+        _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______, _______,      _______, _______, _______, _______, QK_BOOT,
+        _______, _______, _______, _______, _______,              QK_MAGIC_UNSWAP_CTL_GUI, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
+                          _______, _______, _______,              _______, _______, _______
+      )
+
+
+};
+
+// const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
+// combo_t key_combos[] = {
+//     COMBO(combo_boot, QK_BOOT),
+// };
+
+//  const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+//     [0] = LAYOUT_eg(
+//         LT(3,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,             KC_J,     KC_L,  KC_U,    KC_Y,   KC_BSPC,
+//         KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,     KC_N,  KC_E,    KC_I,   KC_O,
+//         KC_Z,  KC_X,   KC_C, MT(MOD_LCTL,KC_D),  MT(MOD_LALT,KC_V),         MT(MOD_LALT,KC_K), MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT,  LT(4,KC_SLSH),
+//                 _______,  MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),LT(2,KC_TAB), _______
+//     ),
+
+//     [1] = LAYOUT_eg(
+//          HYPR(KC_0), HYPR(KC_1), HYPR(KC_2), HYPR(KC_3), HYPR(KC_4),      HYPR(KC_5),  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
+//          S(KC_TAB),KC_TAB,KC_ESC,KC_ENTER,     KC_ESC,                 KC_PGUP,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+//          XXXXXXX,    XXXXXXX,    XXXXXXX,    S(LGUI(KC_Z)),LGUI(KC_Z),                KC_PGDN, KC_MPLY, KC_VOLD,  KC_VOLU,  KC_MPLY,
+//  _______,                            _______,  _______,               XXXXXXX, MS_BTN1 , _______    ),
+//     /*
+//      *      1 2 3 4 5   6 7 8 9 0
+//      *      ~ [ { ( -   + ) } ] |
+//      *      \ ` ' " _   = : ; . /
+//      *
+//      *      !@#$%    ^&*()
+//      */
+//     [2] = LAYOUT_eg(
+//          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
+//          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
+//          KC_BSLS, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
+//            _______,                  _______, _______,                    MS_BTN2,  XXXXXXX , _______    ),
+
+//     [3] = LAYOUT_eg(
+//         XXXXXXX, _______, _______, _______, _______,      _______, _______, MS_UP, _______, QK_BOOT,
+//         _______, _______, _______, MS_BTN1, MS_BTN2,              _______, MS_LEFT, MS_DOWN, MS_RGHT, _______,
+//         _______, _______, _______, MS_BTN3, _______,              _______, _______, _______, _______, _______,
+//                          _______,  _______, QK_AUDIO_TOGGLE,               QK_MUSIC_TOGGLE, QK_AUDIO_CLICKY_TOGGLE	 ,_______      ),
+//     [4] = LAYOUT_eg(
+//         HYPR(KC_Q), HYPR(KC_W), HYPR(KC_F), HYPR(KC_R), HYPR(KC_T),   HYPR(KC_J), HYPR(KC_L),    HYPR(KC_SPACE) ,  HYPR(KC_Y),    _______,
+//         HYPR(KC_A), HYPR(KC_S), HYPR(KC_R), HYPR(KC_T), HYPR(KC_G),           HYPR(KC_M), HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), HYPR(KC_O),
+//         QK_BOOT, HYPR(KC_X), HYPR(KC_C), HYPR(KC_D), HYPR(KC_V),           HYPR(KC_K), HYPR(KC_H) ,   HYPR(KC_COMM), HYPR(KC_DOT), HYPR(KC_ENTER),
+//                      _______,        _______,_______,                          HYPR(KC_SPACE),   _______,_______
+//     )};
 
 const int            led_count =1;
 int                  leds[]    = {0};
