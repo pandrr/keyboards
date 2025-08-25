@@ -3,59 +3,89 @@
 #include "deferred_exec.h"
 
 
+
 enum layers {
     DEFAULT,
     LNAV,
     LSYM,
     LUI,
+    LMOGO,
+    LMOSFT,
     LCFG
 };
 
 const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
 const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo_os_alt[] = {KC_H, KC_K, COMBO_END};
-const uint16_t PROGMEM combo_os_gui[] = {KC_M, KC_N, COMBO_END};
-const uint16_t PROGMEM combo_os_altgui[] = {KC_T, KC_G, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl2[] = {KC_D, KC_C, COMBO_END};
+const uint16_t PROGMEM combo_os_alt[] = {KC_K, KC_H, COMBO_END};
+// const uint16_t PROGMEM combo_os_gui[] = {KC_M, KC_N, COMBO_END};
+// const uint16_t PROGMEM combo_os_gui2[] = {KC_T, KC_G, COMBO_END};
+const uint16_t PROGMEM combo_os_altgui[] = {KC_D, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_pause[] = {KC_DOT, KC_SLSH, COMBO_END};
 
-const uint16_t PROGMEM combo_leaderkey[] = {KC_J, KC_L, COMBO_END};
+// const uint16_t PROGMEM combo_vimode[] = {KC_T, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_leaderkey[] = {KC_N, KC_K, COMBO_END};
 const uint16_t PROGMEM combo_undo[] = {KC_L, KC_U, COMBO_END};
-const uint16_t PROGMEM combo_yank[] = {KC_U, KC_Y, COMBO_END};
-const uint16_t PROGMEM combo_paste[] = {KC_F, KC_P, COMBO_END};
+// const uint16_t PROGMEM combo_yank[] = {KC_U, KC_Y, COMBO_END};
+// const uint16_t PROGMEM combo_paste[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM combo_sym[] = {KC_R, KC_T, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(combo_boot, QK_BOOT),
+    // COMBO(combo_boot, QK_BOOT),
     COMBO(combo_os_ctl, OS_LCTL),
+    COMBO(combo_os_ctl2, OS_LCTL),
     COMBO(combo_os_alt, OS_LALT),
-    COMBO(combo_os_gui, OS_LGUI),
+    // COMBO(combo_os_gui, OS_RGUI),
+    // COMBO(combo_os_gui2, OS_LGUI),
     COMBO(combo_os_altgui,OS_LAG),
     COMBO(combo_leaderkey, KC_F13),
-    COMBO(combo_undo, LGUI(KC_Z)),
-    COMBO(combo_yank, LGUI(KC_C)),
-    COMBO(combo_paste, LGUI(KC_V)),
+    // COMBO(combo_vimode, OSL(LVIM)),
+    // COMBO(combo_undo, LGUI(KC_Z)),
+    // COMBO(combo_yank, LGUI(KC_C)),
+    // COMBO(combo_paste, LGUI(KC_V)),
+    COMBO(combo_pause,KC_MPLY),
     COMBO(combo_sym,OSL(LSYM)),
 };
 
-
+enum custom_keycodes {
+    VIM_CMD = SAFE_RANGE,
+    moWord,
+    moBack,
+    moOpenLine,
+    moSelLine,
+    moDelRight,
+    moDel,
+    moUndo,
+    moRedo,
+    moYank,
+    moPaste,
+    moGoStart,
+    moGoTop,
+    moGoEnd,
+    moGoEndLine,
+};
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
+    /*
+     *      q w f p b   j l u y
+     *      a s r t g   m n e i o
+     *      z x c d v   k h , . /
+     *
+     */
     [DEFAULT] = LAYOUT_eg(
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,     KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
         KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
-        KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                      KC_K,  KC_H, KC_COMM, KC_DOT,  LT(LUI,KC_SLSH),
-                // MT(MOD_LSFT,KC_ESC),KC_ESC,KC_ENTER,       KC_SPACE,KC_TAB,LT(2,KC_TAB)
-                MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
-                // MT(MOD_LSFT,KC_ESC),KC_LSFT,MT(MOD_LGUI,KC_SPACE),       MO(1),MO(2),LT(2,KC_TAB)
-                // KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),MO(2),MO(2)
+        KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                      KC_K,  KC_H, KC_COMM, KC_DOT, KC_SLSH,
+        MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
     ),
 
     [LNAV] = LAYOUT_eg(
-         _______, _______, _______, _______,    _______,      KC_PGUP,  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
-         KC_ESC,    OS_LSFT,  LSFT(KC_TAB),  KC_TAB,HYPR(KC_5)       ,                  KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
-         XXXXXXX,    XXXXXXX,  XXXXXXX,    KC_LCTL, KC_LALT,              KC_LALT, KC_LCTL, KC_VOLD,  KC_VOLU,  KC_ESC,
-                          _______,KC_LSFT,KC_ENTER,                                XXXXXXX, _______, _______
+         KC_ESC, moWord, _______, moPaste,    moBack,      KC_PGUP,  moUndo,       KC_UP,    moYank,   KC_DEL,
+         KC_ESC,    OS_LSFT,  LSFT(KC_TAB),KC_TAB,  KC_F13,                         KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, moOpenLine,
+         _______,    moSelLine,  moDel,moDel, KC_LALT,              KC_LALT, KC_LCTL, KC_LGUI,  _______,  KC_ENTER,
+                          _______,OSL(LMOSFT),_______,                                XXXXXXX, _______, _______
     ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -74,15 +104,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LUI] = LAYOUT_eg(
         XXXXXXX, LCTL(LSFT(KC_TAB)), LALT(KC_UP), LCTL(KC_TAB), LGUI(KC_GRV), XXXXXXX, LGUI(KC_TAB),    HYPR(KC_SPACE) ,   LGUI(S(KC_TAB)),    _______,
         XXXXXXX, LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_RIGHT), XXXXXXX,           XXXXXXX, HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), XXXXXXX,
-        MO(LCFG), XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN2,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX,
+        MO(LCFG), KC_VOLD, KC_VOLU, XXXXXXX, MS_BTN2,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX,
                            _______,MS_BTN3, MS_BTN1,                         XXXXXXX,  _______, _______
     ),
 
+    // motion goto
+    [LMOGO] = LAYOUT_eg(
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, moGoEndLine, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, moGoStart,XXXXXXX, XXXXXXX, moGoTop,           XXXXXXX, XXXXXXX, moGoEnd, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                          XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
+      ),
+    // shift motions
+    [LMOSFT] = LAYOUT_eg(
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, moRedo, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, moDelRight, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                          XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
+      ),
     // backspace - flash
     // m - mac mode
     // w - win mode
     [LCFG] = LAYOUT_eg(
-        _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______, _______,      _______, _______, _______, _______, QK_BOOT,
+        _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______,    _______,   _______, _______, _______, _______, QK_BOOT,
         _______, _______, _______, _______, _______,              QK_MAGIC_UNSWAP_CTL_GUI, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
                           _______, _______, _______,              _______, _______, _______
@@ -91,7 +135,163 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-// const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
+
+
+// const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+
+//     [DEFAULT] = LAYOUT_eg(
+//         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,     KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
+//         KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
+//         KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                      KC_K,  KC_H, KC_COMM, KC_DOT,  LT(LUI,KC_SLSH),
+//                 // MT(MOD_LSFT,KC_ESC),KC_ESC,KC_ENTER,       KC_SPACE,KC_TAB,LT(2,KC_TAB)
+//                 MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
+//                 // MT(MOD_LSFT,KC_ESC),KC_LSFT,MT(MOD_LGUI,KC_SPACE),       MO(1),MO(2),LT(2,KC_TAB)
+//                 // KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(1,KC_SPACE),MO(2),MO(2)
+//     ),
+
+//     [LNAV] = LAYOUT_eg(
+//          _______, _______, _______, _______,    _______,      KC_PGUP,  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
+//          KC_ESC,    OS_LSFT,  LSFT(KC_TAB),  KC_TAB,HYPR(KC_5)       ,                  KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
+//          XXXXXXX,    XXXXXXX,  XXXXXXX,    KC_LCTL, KC_LALT,              KC_LALT, KC_LCTL, KC_VOLD,  KC_VOLU,  KC_ESC,
+//                           _______,KC_LSFT,KC_ENTER,                                XXXXXXX, _______, _______
+//     ),
+//     /*
+//      *      1 2 3 4 5   6 7 8 9 0
+//      *      ~ [ { ( -   + ) } ] |
+//      *      \ ` ' " _   = : ; . /
+//      *
+//      *      !@#$%    ^&*()
+//      */
+//     [LSYM] = LAYOUT_eg(
+//          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
+//          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,                KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
+//          XXXXXXX, KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),             KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
+//                            _______, _______,   _______,                  MS_BTN2,  XXXXXXX, _______
+//     ),
+
+//     [LUI] = LAYOUT_eg(
+//         XXXXXXX, LCTL(LSFT(KC_TAB)), LALT(KC_UP), LCTL(KC_TAB), LGUI(KC_GRV), XXXXXXX, LGUI(KC_TAB),    HYPR(KC_SPACE) ,   LGUI(S(KC_TAB)),    _______,
+//         XXXXXXX, LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_RIGHT), XXXXXXX,           XXXXXXX, HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), XXXXXXX,
+//         MO(LCFG), XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN2,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX,
+//                            _______,MS_BTN3, MS_BTN1,                         XXXXXXX,  _______, _______
+//     ),
+
+//     // backspace - flash
+//     // m - mac mode
+//     // w - win mode
+//     [LCFG] = LAYOUT_eg(
+//         _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______, _______,      _______, _______, _______, _______, QK_BOOT,
+//         _______, _______, _______, _______, _______,              QK_MAGIC_UNSWAP_CTL_GUI, _______, _______, _______, _______,
+//         _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
+//                           _______, _______, _______,              _______, _______, _______
+//       )
+
+
+// };
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record)
+{
+
+    if (record->event.pressed)
+    {
+        switch (keycode)
+        {
+            case VIM_CMD:
+                tap_code(KC_ESC);
+                SEND_STRING(":");
+                return false;
+            case moWord:
+                register_code(KC_LSFT);
+                register_code(KC_LALT);
+                tap_code(KC_RIGHT);
+                unregister_code(KC_LALT);
+                unregister_code(KC_LSFT);
+                return false;
+            case moBack:
+                register_code(KC_LALT);
+                tap_code(KC_LEFT);
+                unregister_code(KC_LALT);
+                return false;
+
+            case moPaste:
+                register_code(KC_LGUI);
+                tap_code(KC_V);
+                unregister_code(KC_LGUI);
+                return false;
+            case moYank:
+                register_code(KC_LGUI);
+                tap_code(KC_C);
+                unregister_code(KC_LGUI);
+                return false;
+            case moUndo:
+                register_code(KC_LGUI);
+                tap_code(KC_Z);
+                unregister_code(KC_LGUI);
+                return false;
+            case moRedo:
+                register_code(KC_LGUI);
+                register_code(KC_LSFT);
+                tap_code(KC_Z);
+                unregister_code(KC_LSFT);
+                unregister_code(KC_LGUI);
+                return false;
+
+            case moOpenLine:
+                register_code(KC_LGUI);
+                tap_code(KC_RIGHT);
+                unregister_code(KC_LGUI);
+                tap_code(KC_ENTER);
+                return false;
+
+            case moSelLine:
+                register_code(KC_LGUI);
+                tap_code(KC_LEFT);
+                unregister_code(KC_LGUI);
+                register_code(KC_LGUI);
+                register_code(KC_LSFT);
+                tap_code(KC_RIGHT);
+                unregister_code(KC_LGUI);
+                unregister_code(KC_LSFT);
+                return false;
+
+            case moDelRight:
+                register_code(KC_LSFT);
+                register_code(KC_LGUI);
+                tap_code(KC_RIGHT);
+                unregister_code(KC_LGUI);
+                unregister_code(KC_LSFT);
+                tap_code(KC_DEL);
+                return false;
+
+            case moDel:
+                tap_code(KC_DEL);
+                return false;
+            case moGoTop:
+                register_code(KC_LGUI);
+                tap_code(KC_UP);
+                unregister_code(KC_LGUI);
+                return false;
+            case moGoEnd:
+                register_code(KC_LGUI);
+                tap_code(KC_DOWN);
+                unregister_code(KC_LGUI);
+                return false;
+            case moGoStart:
+                register_code(KC_LGUI);
+                tap_code(KC_LEFT);
+                unregister_code(KC_LGUI);
+                return false;
+            case moGoEndLine:
+                register_code(KC_LGUI);
+                tap_code(KC_RIGHT);
+                unregister_code(KC_LGUI);
+                return false;
+
+
+        }
+    }
+    return true;
+}// const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
 // combo_t key_combos[] = {
 //     COMBO(combo_boot, QK_BOOT),
 // };
@@ -136,6 +336,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 const int            led_count =1;
 int                  leds[]    = {0};
+
 
 
 const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
