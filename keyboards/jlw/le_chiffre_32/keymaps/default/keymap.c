@@ -5,6 +5,7 @@
 
 enum layers {
     DEFAULT,
+    CTLBASED,
     LNAV,
     LSYM,
     LUI,
@@ -14,6 +15,7 @@ enum layers {
 };
 
 const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
+const uint16_t PROGMEM combo_tab[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
 // const uint16_t PROGMEM combo_os_ctl2[] = {KC_D, KC_C, COMBO_END};
 const uint16_t PROGMEM combo_os_alt[] = {KC_K, KC_H, COMBO_END};
@@ -40,6 +42,7 @@ combo_t key_combos[] = {
     COMBO(combo_os_altgui,OS_LAG),
     COMBO(combo_os_sftgui,OS_LSG),
     COMBO(combo_leaderkey, KC_F13),
+    COMBO(combo_tab, KC_TAB),
     // COMBO(combo_vimode, OSL(LVIM)),
     // COMBO(combo_undo, LGUI(KC_Z)),
     // COMBO(combo_yank, LGUI(KC_C)),
@@ -64,6 +67,7 @@ enum custom_keycodes {
     moGoTop,
     moGoEnd,
     moGoEndLine,
+    linux,
 };
 
 
@@ -79,9 +83,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,  _______,   KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
         KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
         KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                      KC_K,  KC_H, KC_COMM, KC_DOT, KC_SLSH,
-        MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_TAB)
+        MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
 
+    [CTLBASED] = LAYOUT_3thumb(
+        _______, _______, _______, _______, _______,_______,   _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______,
+                          _______, _______, MT(MOD_LCTL,KC_ENTER),           _______, _______, _______
+      ),
     // [LNAV] = LAYOUT_3thumb(
     //      KC_ESC, _______, _______, _______,    _______,   _______,   KC_PGUP,  KC_HOME,       KC_UP,    KC_END,   KC_DEL,
     //      KC_ESC,    OS_LSFT,  LSFT(KC_TAB),  KC_F13,_______,                         KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, KC_ENTER,
@@ -133,7 +143,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // m - mac mode
     // w - win mode
     [LCFG] = LAYOUT_3thumb(
-        _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______, _______,   _______,   _______, _______, _______, _______, QK_BOOT,
+        _______, QK_MAGIC_SWAP_CTL_GUI, _______, _______, _______,   _______,   _______, linux, _______, _______, QK_BOOT,
         _______, _______, _______, _______, _______,              QK_MAGIC_UNSWAP_CTL_GUI, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,              _______, _______, _______, _______, _______,
                           _______, _______, _______,              _______, _______, _______
@@ -142,77 +152,117 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+uint8_t myOs=0;// 0 mac \ 1 linux
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record)
 {
+
+    uint16_t cmdKey=KC_LGUI;
+    if(keymap_config.swap_lctl_lgui ) cmdKey=KC_LCTL;
 
     if (record->event.pressed)
     {
         switch (keycode)
         {
+            case linux:
+                if(myOs==0 )
+                {
+                     myOs=1;
+                    layer_on(CTLBASED);
+                }
+                else{
+                    layer_off(CTLBASED);
+                    myOs=0;
+                }
+                return false;
             case VIM_CMD:
                 tap_code(KC_ESC);
                 SEND_STRING(":");
                 return false;
             case moWord:
                 register_code(KC_LSFT);
-                register_code(KC_LALT);
+                if(myOs==0) register_code(KC_LALT);
+                else register_code(KC_LCTL);
+
                 tap_code(KC_RIGHT);
-                unregister_code(KC_LALT);
+                if(myOs==0) unregister_code(KC_LALT);
+                else unregister_code(KC_LCTL);
                 unregister_code(KC_LSFT);
                 return false;
             case moBack:
-                register_code(KC_LALT);
+                if(myOs==0) register_code(KC_LALT);
+                else register_code(KC_LCTL);
                 tap_code(KC_LEFT);
-                unregister_code(KC_LALT);
+                if(myOs==0) unregister_code(KC_LALT);
+                else unregister_code(KC_LCTL);
                 return false;
 
             case moPaste:
-                register_code(KC_LGUI);
-                tap_code(KC_V);
-                unregister_code(KC_LGUI);
+                if(myOs==1)
+                {
+                    register_code(KC_LSFT);
+                    tap_code(KC_INS);
+                    unregister_code(KC_LSFT);
+                }
+                else
+                {
+                    register_code(KC_LGUI);
+                    tap_code(KC_V);
+                    unregister_code(KC_LGUI);
+                }
                 return false;
             case moYank:
-                register_code(KC_LGUI);
-                tap_code(KC_C);
-                unregister_code(KC_LGUI);
+                if(myOs==1)
+                {
+                    register_code(KC_LCTL);
+                    tap_code(KC_INS);
+                    unregister_code(KC_LCTL);
+                }
+                else
+                {
+                    register_code(KC_LGUI);
+                    tap_code(KC_C);
+                    unregister_code(KC_LGUI);
+                }
                 return false;
+
             case moUndo:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_Z);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 return false;
             case moRedo:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 register_code(KC_LSFT);
                 tap_code(KC_Z);
                 unregister_code(KC_LSFT);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 return false;
 
             case moOpenLine:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_RIGHT);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 tap_code(KC_ENTER);
                 return false;
 
             case moSelLine:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_LEFT);
-                unregister_code(KC_LGUI);
-                register_code(KC_LGUI);
+                unregister_code(cmdKey);
+                register_code(cmdKey);
                 register_code(KC_LSFT);
                 tap_code(KC_RIGHT);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 unregister_code(KC_LSFT);
                 return false;
 
             case moDelRight:
                 register_code(KC_LSFT);
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_RIGHT);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 unregister_code(KC_LSFT);
                 tap_code(KC_DEL);
                 return false;
@@ -221,24 +271,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 tap_code(KC_DEL);
                 return false;
             case moGoTop:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_UP);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 return false;
             case moGoEnd:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_DOWN);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 return false;
             case moGoStart:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_LEFT);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 return false;
             case moGoEndLine:
-                register_code(KC_LGUI);
+                register_code(cmdKey);
                 tap_code(KC_RIGHT);
-                unregister_code(KC_LGUI);
+                unregister_code(cmdKey);
                 return false;
 
 
@@ -263,6 +313,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
         [4] =   { ENCODER_CCW_CW(_______, _______) },
         [5] =   { ENCODER_CCW_CW(_______, _______) },
         [6] =   { ENCODER_CCW_CW(_______, _______) },
+        [7] =   { ENCODER_CCW_CW(_______, _______) },
         // [5] =   { ENCODER_CCW_CW(_______, _______) },
         // [6] =   { ENCODER_CCW_CW(_______, _______) }
    };
