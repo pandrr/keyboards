@@ -1,6 +1,4 @@
 #include QMK_KEYBOARD_H
-// #include "os_detection.h"
-// #include "deferred_exec.h"
 
 
 enum layers {
@@ -18,39 +16,22 @@ const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
 const uint16_t PROGMEM combo_tab[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM combo_tab2[] = {KC_T, KC_G, COMBO_END};
 const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
-// const uint16_t PROGMEM combo_os_ctl2[] = {KC_D, KC_C, COMBO_END};
 const uint16_t PROGMEM combo_os_alt[] = {KC_K, KC_H, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui[] = {KC_J, KC_L, COMBO_END};
 const uint16_t PROGMEM combo_os_sftgui[] = {KC_J ,KC_L, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui2[] = {KC_T, KC_G, COMBO_END};
 const uint16_t PROGMEM combo_os_altgui[] = {KC_D, KC_V, COMBO_END};
 const uint16_t PROGMEM combo_pause[] = {KC_DOT, KC_SLSH, COMBO_END};
-
-// const uint16_t PROGMEM combo_vimode[] = {KC_T, KC_V, COMBO_END};
 const uint16_t PROGMEM combo_leaderkey[] = {KC_N, KC_K, COMBO_END};
 const uint16_t PROGMEM combo_undo[] = {KC_L, KC_U, COMBO_END};
-// const uint16_t PROGMEM combo_yank[] = {KC_U, KC_Y, COMBO_END};
-// const uint16_t PROGMEM combo_paste[] = {KC_F, KC_P, COMBO_END};
-// const uint16_t PROGMEM combo_sym[] = {KC_R, KC_T, COMBO_END};
 
 combo_t key_combos[] = {
-    // COMBO(combo_boot, QK_BOOT),
     COMBO(combo_os_ctl, OS_LCTL),
-    // COMBO(combo_os_ctl2, OS_LCTL),
     COMBO(combo_os_alt, OS_LALT),
-    // COMBO(combo_os_gui, OS_RGUI),
-    // COMBO(combo_os_gui2, OS_LGUI),
     COMBO(combo_os_altgui,OS_LAG),
     COMBO(combo_os_sftgui,OS_LSG),
     COMBO(combo_leaderkey, KC_F13),
     COMBO(combo_tab, KC_TAB),
     COMBO(combo_tab2, KC_TAB),
-    // COMBO(combo_vimode, OSL(LVIM)),
-    // COMBO(combo_undo, LGUI(KC_Z)),
-    // COMBO(combo_yank, LGUI(KC_C)),
-    // COMBO(combo_paste, LGUI(KC_V)),
     COMBO(combo_pause,KC_MPLY),
-    // COMBO(combo_sym,OSL(LSYM)),
 };
 
 enum custom_keycodes {
@@ -72,6 +53,13 @@ enum custom_keycodes {
     linux,
 };
 
+
+const uint8_t pth_side_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM = LAYOUT_3thumb(
+     PTH_OL, PTH_L, PTH_L, PTH_L, PTH_L,  PTH_S,   PTH_R, PTH_R,  PTH_R, PTH_R, PTH_R,
+     PTH_L, PTH_L, PTH_L, PTH_L, PTH_L,           PTH_R, PTH_R, PTH_R,  PTH_R, PTH_R,
+     PTH_L, PTH_L, PTH_L, PTH_L, PTH_L,          PTH_R, PTH_R, PTH_R,  PTH_R, PTH_R,
+
+                 PTH_O, PTH_O, PTH_O,     PTH_O, PTH_O, PTH_O);
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -350,10 +338,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
 // }
 
 
-
-const uint8_t pth_side_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM = LAYOUT_3thumb(
-     PTH_OL, PTH_L, PTH_L, PTH_L, PTH_L,  PTH_S,   PTH_R, PTH_R,  PTH_R, PTH_R, PTH_R,
-     PTH_L, PTH_L, PTH_L, PTH_L, PTH_L,           PTH_R, PTH_R, PTH_R,  PTH_R, PTH_R,
-     PTH_L, PTH_L, PTH_L, PTH_L, PTH_L,          PTH_R, PTH_R, PTH_R,  PTH_R, PTH_R,
-
-                 PTH_O, PTH_O, PTH_O,     PTH_O, PTH_O, PTH_O);
