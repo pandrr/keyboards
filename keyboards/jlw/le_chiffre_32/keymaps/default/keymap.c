@@ -15,42 +15,27 @@ enum layers {
 };
 
 const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
-const uint16_t PROGMEM combo_tab[] = {KC_F, KC_P, COMBO_END};
-const uint16_t PROGMEM combo_tab2[] = {KC_T, KC_G, COMBO_END};
-const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
-// const uint16_t PROGMEM combo_os_ctl2[] = {KC_D, KC_C, COMBO_END};
-const uint16_t PROGMEM combo_os_alt[] = {KC_K, KC_H, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui[] = {KC_J, KC_L, COMBO_END};
-const uint16_t PROGMEM combo_os_sftgui[] = {KC_J ,KC_L, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui2[] = {KC_T, KC_G, COMBO_END};
-const uint16_t PROGMEM combo_os_altgui[] = {KC_D, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_pause[] = {KC_DOT, KC_SLSH, COMBO_END};
 
-// const uint16_t PROGMEM combo_vimode[] = {KC_T, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_leaderkey[] = {KC_N, KC_K, COMBO_END};
-const uint16_t PROGMEM combo_undo[] = {KC_L, KC_U, COMBO_END};
-// const uint16_t PROGMEM combo_yank[] = {KC_U, KC_Y, COMBO_END};
-// const uint16_t PROGMEM combo_paste[] = {KC_F, KC_P, COMBO_END};
-// const uint16_t PROGMEM combo_sym[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo_os_alt[] = {KC_K, KC_H, COMBO_END};
+const uint16_t PROGMEM combo_gui[] = {KC_DOT, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo_os_sftgui[] = {KC_J ,KC_L, COMBO_END};
+const uint16_t PROGMEM combo_os_altgui[] = {KC_D, KC_V, COMBO_END};
+
+const uint16_t PROGMEM combo_tab[] = {KC_F, KC_P, COMBO_END};
+const uint16_t PROGMEM combo_esc[] = {KC_F, KC_W, COMBO_END};
+
 
 combo_t key_combos[] = {
-    // COMBO(combo_boot, QK_BOOT),
+    COMBO(combo_gui,OS_LGUI),
     COMBO(combo_os_ctl, OS_LCTL),
-    // COMBO(combo_os_ctl2, OS_LCTL),
     COMBO(combo_os_alt, OS_LALT),
-    // COMBO(combo_os_gui, OS_RGUI),
-    // COMBO(combo_os_gui2, OS_LGUI),
+
     COMBO(combo_os_altgui,OS_LAG),
     COMBO(combo_os_sftgui,OS_LSG),
-    COMBO(combo_leaderkey, KC_F13),
+
     COMBO(combo_tab, KC_TAB),
-    COMBO(combo_tab2, KC_TAB),
-    // COMBO(combo_vimode, OSL(LVIM)),
-    // COMBO(combo_undo, LGUI(KC_Z)),
-    // COMBO(combo_yank, LGUI(KC_C)),
-    // COMBO(combo_paste, LGUI(KC_V)),
-    COMBO(combo_pause,KC_MPLY),
-    // COMBO(combo_sym,OSL(LSYM)),
+    COMBO(combo_esc, KC_ESC)
 };
 
 enum custom_keycodes {
@@ -102,9 +87,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ),
     [LNAV] = LAYOUT_3thumb(
          KC_ESC, moWord, _______, moPaste,    moBack,   XXXXXXX,   KC_PGUP,  moUndo,       KC_UP,    moYank,   KC_DEL,
-         KC_ESC,    OS_LSFT,  LSFT(KC_TAB),KC_TAB,  KC_F13,                         KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, moOpenLine,
-         _______,    moSelLine,  moDel,moDel, KC_LALT,              KC_F13, KC_LCTL, KC_LALT,  _______,  KC_ENTER,
-                          _______,KC_LSFT,KC_F13,                                XXXXXXX, _______, _______
+         KC_ESC,    OS_LSFT,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),                         KC_PGDN,    KC_LEFT,       KC_DOWN,  KC_RIGHT, moOpenLine,
+         _______,    moSelLine,  moDel,moDel, KC_LALT,              KC_LALT,KC_LCTL, KC_LGUI,  _______,  KC_ENTER,
+                          _______,KC_LSFT,MT(MOD_LCTL,KC_ENTER),                                XXXXXXX, _______, _______
     ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -154,6 +139,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+#define OS_MAC 0
+#define OS_LINUX 1
+
 uint8_t myOs=0;// 0 mac \ 1 linux
 
 
@@ -168,14 +156,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
         switch (keycode)
         {
             case linux:
-                if(myOs==0 )
+                if(myOs==OS_MAC )
                 {
                      myOs=1;
                     layer_on(CTLBASED);
+                    cmdKey=KC_LCTL;
                 }
                 else{
                     layer_off(CTLBASED);
-                    myOs=0;
+                    myOs=OS_MAC;
+                    cmdKey=KC_LCTL;
                 }
                 return false;
             case VIM_CMD:
@@ -184,19 +174,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 return false;
             case moWord:
                 register_code(KC_LSFT);
-                if(myOs==0) register_code(KC_LALT);
+                if(myOs==OS_MAC) register_code(KC_LALT);
                 else register_code(KC_LCTL);
 
                 tap_code(KC_RIGHT);
-                if(myOs==0) unregister_code(KC_LALT);
+                if(myOs==OS_MAC) unregister_code(KC_LALT);
                 else unregister_code(KC_LCTL);
                 unregister_code(KC_LSFT);
                 return false;
             case moBack:
-                if(myOs==0) register_code(KC_LALT);
+                if(myOs==OS_MAC) register_code(KC_LALT);
                 else register_code(KC_LCTL);
                 tap_code(KC_LEFT);
-                if(myOs==0) unregister_code(KC_LALT);
+                if(myOs==OS_MAC) unregister_code(KC_LALT);
                 else unregister_code(KC_LCTL);
                 return false;
 
@@ -279,6 +269,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
             case moDel:
                 tap_code(KC_DEL);
                 return false;
+
             case moGoTop:
                 register_code(cmdKey);
                 tap_code(KC_UP);
@@ -290,14 +281,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 unregister_code(cmdKey);
                 return false;
             case moGoStart:
-                register_code(cmdKey);
-                tap_code(KC_LEFT);
-                unregister_code(cmdKey);
+                if(myOs==OS_MAC){
+                    register_code(cmdKey);
+                    tap_code(KC_LEFT);
+                    unregister_code(cmdKey);
+                }else{
+                    tap_code(KC_HOME);
+                }
                 return false;
             case moGoEndLine:
-                register_code(cmdKey);
-                tap_code(KC_RIGHT);
-                unregister_code(cmdKey);
+                if(myOs==OS_MAC){
+                    register_code(cmdKey);
+                    tap_code(KC_RIGHT);
+                    unregister_code(cmdKey);
+                }else{
+                    tap_code(KC_END);
+                }
                 return false;
 
 
