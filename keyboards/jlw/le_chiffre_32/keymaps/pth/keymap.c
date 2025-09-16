@@ -51,6 +51,9 @@ enum custom_keycodes {
     moGoEnd,
     moGoEndLine,
     linux,
+    POS_00, POS_01,  POS_02, POS_03, POS_04,
+    POS_10, POS_11,  POS_12, POS_13, POS_14,
+    POS_20, POS_21,  POS_22, POS_23, POS_24
 };
 
 
@@ -72,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [DEFAULT] = LAYOUT_3thumb(
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,  _______,               KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
         KC_A,  MT(MOD_LALT,KC_S),   MT(MOD_LGUI,KC_R), MT(MOD_LCTL,KC_T), KC_G,         KC_M,  MT(MOD_LCTL,KC_N),  MT(MOD_LGUI,KC_E),    MT(MOD_RALT,KC_I),   KC_O,
-        KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                                  KC_K,  KC_H, KC_COMM, KC_DOT, KC_SLSH,
+        KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                                  KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
         MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
 
@@ -123,6 +126,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, moDelRight, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                           XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
+      ),
+    [LMOUSE] = LAYOUTCONV(
+        POS_00, POS_01,  POS_02, POS_03, POS_04,      XXXXXXX, moRedo, XXXXXXX, XXXXXXX, XXXXXXX,
+        POS_10, POS_11,  POS_12, POS_13, POS_14,      XXXXXXX, MS_BTN1, MS_BTN3, MS_BTN2, XXXXXXX,
+        POS_20, POS_21,  POS_22, POS_23, POS_24,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                          XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX
       ),
     // backspace - flash
     // m - mac mode
@@ -282,6 +291,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 unregister_code(cmdKey);
                 return false;
 
+
+      case POS_00: digitizer_in_range_on();digitizer_set_position(0.1 , 0.2);  return false;
+      case POS_01: digitizer_in_range_on();digitizer_set_position(0.30, 0.2);  return false;
+      case POS_02: digitizer_in_range_on();digitizer_set_position(0.50, 0.2);  return false;
+      case POS_03: digitizer_in_range_on();digitizer_set_position(0.70, 0.2);  return false;
+      case POS_04: digitizer_in_range_on();digitizer_set_position(0.90, 0.2);  return false;
+
+      case POS_10: digitizer_in_range_on();digitizer_set_position(0.1 , 0.5);  return false;
+      case POS_11: digitizer_in_range_on();digitizer_set_position(0.30, 0.5);  return false;
+      case POS_12: digitizer_in_range_on();digitizer_set_position(0.50, 0.5);  return false;
+      case POS_13: digitizer_in_range_on();digitizer_set_position(0.70, 0.5);  return false;
+      case POS_14: digitizer_in_range_on();digitizer_set_position(0.90, 0.5);  return false;
+
+      case POS_20: digitizer_in_range_on();digitizer_set_position(0.1 , 0.8);  return false;
+      case POS_21: digitizer_in_range_on();digitizer_set_position(0.30, 0.8);  return false;
+      case POS_22: digitizer_in_range_on();digitizer_set_position(0.50, 0.8);  return false;
+      case POS_23: digitizer_in_range_on();digitizer_set_position(0.70, 0.8);  return false;
+      case POS_24: digitizer_in_range_on();digitizer_set_position(0.90, 0.8);  return false;
 
         }
     }
