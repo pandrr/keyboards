@@ -36,11 +36,19 @@ const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
 
 const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM combo_os_gui[] = {KC_K, KC_H, COMBO_END};
-const uint16_t PROGMEM combo_os_gui2[] = {KC_ENTER, KC_N, COMBO_END};
 const uint16_t PROGMEM combo_os_alt[] = {KC_DOT, KC_COMM, COMBO_END};
+
+const uint16_t PROGMEM combo_os_gui_l[] = {KC_D, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl_l[] = {KC_C, KC_D, COMBO_END};
+const uint16_t PROGMEM combo_os_alt_l[] = {KC_X, KC_C, COMBO_END};
+
 // const uint16_t PROGMEM combo_os_sftgui[] = {KC_J ,KC_L, COMBO_END
-const uint16_t PROGMEM combo_os_guialt[] = {KC_K, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo_os_guisft[] = {KC_K, KC_DOT, COMBO_END};
+const uint16_t PROGMEM combo_os_guialt_l[] = {KC_T, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_guialt[] = {KC_K, KC_N, COMBO_END};
+
+const uint16_t PROGMEM combo_os_guisft[] = {KC_K, KC_M, COMBO_END};
+const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_V, COMBO_END};
+
 const uint16_t PROGMEM combo_os_hypr[] = {KC_Z, KC_X, COMBO_END};
 
 const uint16_t PROGMEM combo_tab[] = {KC_F, KC_P, COMBO_END};
@@ -48,10 +56,15 @@ const uint16_t PROGMEM combo_esc[] = {KC_F, KC_W, COMBO_END};
 
 
 combo_t key_combos[] = {
-    COMBO(combo_os_gui,OS_LGUI),
-    COMBO(combo_os_gui2,OS_LGUI),
+    COMBO(combo_os_gui_l,OS_LGUI),
+    COMBO(combo_os_ctl_l, OS_LCTL),
+    COMBO(combo_os_alt_l, OS_LALT),
+    COMBO(combo_os_gui, OS_LGUI),
     COMBO(combo_os_ctl, OS_LCTL),
     COMBO(combo_os_alt, OS_LALT),
+
+    COMBO(combo_os_guialt_l,OS_LAG),
+    COMBO(combo_os_guisft_l,OS_LSG),
     COMBO(combo_os_guialt,OS_LAG),
     COMBO(combo_os_guisft,OS_LSG),
 
