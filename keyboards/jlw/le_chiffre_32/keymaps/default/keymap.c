@@ -1,4 +1,5 @@
 
+#include <stdint.h>
 #define LAYOUTCONV( \
   k00, k01, k02, k03, k04, k05, k06, k07, k08, k09,  \
   k10, k11, k12, k13, k14, k15, k16, k17, k18, k19,  \
@@ -80,6 +81,7 @@ enum custom_keycodes {
     moBack,
     moOpenLine,
     moSelLine,
+    moSelLineUp,
     moDelRight,
     moDel,
     moBspc,
@@ -130,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          KC_ESC, moWord, _______, moPaste,    moBack,              KC_PGUP,  moUndo,       KC_UP,    moYank,   KC_DEL,
          KC_ESC,    OS_LSFT,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),    KC_PGDN,  KC_LEFT,     KC_DOWN,  KC_RIGHT, moOpenLine,
          _______,    moSelLine,  moDel,moDel, KC_LALT,              moDelRight,moBspc, _______,  _______,  KC_ENTER,
-                          _______,KC_LSFT,MT(MOD_LCTL,KC_ENTER),                                XXXXXXX, _______, _______
+                          _______,MO(LMOSFT),MT(MOD_LCTL,KC_ENTER),                                XXXXXXX, _______, _______
     ),
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -164,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LMOSFT] = LAYOUTCONV(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      moJLines, moRedo, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, moDelRight, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, moSelLineUp, XXXXXXX, moDelRight, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                           XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX
       ),
 
@@ -193,12 +195,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 uint8_t myOs=0;// 0 mac \ 1 linux
 
+uint8_t countX=0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record)
 {
-
     uint16_t cmdKey=KC_LGUI;
     if(keymap_config.swap_lctl_lgui ) cmdKey=KC_LCTL;
+    if(keycode!=moSelLineUp && keycode!=moSelLine)countX=0;
 
     if (record->event.pressed)
     {
@@ -217,10 +220,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                     cmdKey=KC_LCTL;
                 }
                 return false;
+
             case VIM_CMD:
                 tap_code(KC_ESC);
                 SEND_STRING(":");
                 return false;
+
             case moWord:
                 register_code(KC_LSFT);
                 if(myOs==OS_MAC) register_code(KC_LALT);
@@ -231,6 +236,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 else unregister_code(KC_LCTL);
                 unregister_code(KC_LSFT);
                 return false;
+
             case moBack:
                 if(myOs==OS_MAC) register_code(KC_LALT);
                 else register_code(KC_LCTL);
@@ -253,6 +259,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                     unregister_code(KC_LGUI);
                 }
                 return false;
+
             case moYank:
                 if(myOs==1)
                 {
@@ -273,6 +280,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 tap_code(KC_Z);
                 unregister_code(cmdKey);
                 return false;
+
             case moRedo:
                 register_code(cmdKey);
                 register_code(KC_LSFT);
@@ -296,14 +304,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 return false;
 
             case moSelLine:
-                register_code(cmdKey);
-                tap_code(KC_LEFT);
-                unregister_code(cmdKey);
-                register_code(cmdKey);
-                register_code(KC_LSFT);
-                tap_code(KC_RIGHT);
-                unregister_code(cmdKey);
-                unregister_code(KC_LSFT);
+                if(countX==0)
+                {
+                    register_code(cmdKey);
+                    tap_code(KC_LEFT);
+                    unregister_code(cmdKey);
+                    register_code(cmdKey);
+                    register_code(KC_LSFT);
+                    tap_code(KC_RIGHT);
+                    unregister_code(cmdKey);
+                    unregister_code(KC_LSFT);
+                    countX++;
+                } else {
+                    register_code(KC_LSFT);
+                    tap_code(KC_DOWN);
+                    unregister_code(KC_LSFT);
+                }
+                return false;
+
+            case moSelLineUp:
+                if(countX==0)
+                {
+                    register_code(cmdKey);
+                    tap_code(KC_RIGHT);
+                    unregister_code(cmdKey);
+                    register_code(cmdKey);
+                    register_code(KC_LSFT);
+                    tap_code(KC_LEFT);
+                    unregister_code(cmdKey);
+                    unregister_code(KC_LSFT);
+                    countX++;
+                } else {
+                    register_code(KC_LSFT);
+                    tap_code(KC_UP);
+                    unregister_code(KC_LSFT);
+                }
                 return false;
 
             case moDelRight:
@@ -318,6 +353,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
             case moBspc:
                 tap_code(KC_BSPC);
                 return false;
+
             case moDel:
                 tap_code(KC_DEL);
                 return false;
@@ -327,11 +363,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 tap_code(KC_UP);
                 unregister_code(cmdKey);
                 return false;
+
             case moGoEnd:
                 register_code(cmdKey);
                 tap_code(KC_DOWN);
                 unregister_code(cmdKey);
                 return false;
+
             case moGoStart:
                 if(myOs==OS_MAC){
                     register_code(cmdKey);
@@ -341,6 +379,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                     tap_code(KC_HOME);
                 }
                 return false;
+
             case moGoEndLine:
                 if(myOs==OS_MAC){
                     register_code(cmdKey);
@@ -350,6 +389,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                     tap_code(KC_END);
                 }
                 return false;
+
             case  moJLines:
                 if(myOs==OS_MAC){
                     register_code(cmdKey);
@@ -380,7 +420,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
         }
     }
     return true;
-}const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
+}
+
+const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
     LAYOUTCONV(
          '*', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R',
          'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R',
