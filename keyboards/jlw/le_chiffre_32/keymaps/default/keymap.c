@@ -129,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       ),
     [LNAV] = LAYOUTCONV(
          KC_ESC, moWord, _______, moPaste,    moBack,              KC_PGUP,  moUndo,       KC_UP,    moYank,   KC_DEL,
-         KC_ESC,    OS_LSFT,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),    KC_PGDN,  KC_LEFT,     KC_DOWN,  KC_RIGHT, moOpenLine,
+         KC_ESC, _______,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),    KC_PGDN,  KC_LEFT,     KC_DOWN,  KC_RIGHT, moOpenLine,
          _______,    moSelLine,  moDel,moDel, KC_LALT,              moDelRight,moBspc, _______,  _______,  KC_ENTER,
                           _______,MO(LMOSFT),MT(MOD_LCTL,KC_ENTER),                                XXXXXXX, _______, _______
     ),
@@ -144,7 +144,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LSYM] =LAYOUTCONV(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,        KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
-         MO(LFKEYS), KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
+         MO(LFKEYS), KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, S(KC_8),  KC_BSLS,
                            _______, _______,   _______,          MS_BTN2,  XXXXXXX, _______
     ),
     [LFKEYS] =LAYOUTCONV(
