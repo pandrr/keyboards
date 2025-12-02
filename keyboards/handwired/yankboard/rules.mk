@@ -1,6 +1,10 @@
 COMBO_ENABLE = yes
 #TAP_DANCE_ENABLE = yes
+DIGITIZER_ENABLE = yes
+DEFERRED_EXEC_ENABLE = yes
 
+MOUSEKEY_ENABLE = yes
+OS_DETECTION_ENABLE = yes
 
 SRC += features/achordion.c
 

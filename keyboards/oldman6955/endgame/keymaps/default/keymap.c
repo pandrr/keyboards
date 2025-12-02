@@ -14,37 +14,53 @@ enum layers {
     LCFG
 };
 
-const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
-const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo_os_ctl2[] = {KC_D, KC_C, COMBO_END};
-const uint16_t PROGMEM combo_os_alt[] = {KC_K, KC_H, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui[] = {KC_M, KC_N, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui2[] = {KC_T, KC_G, COMBO_END};
-const uint16_t PROGMEM combo_os_altgui[] = {KC_D, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_pause[] = {KC_DOT, KC_SLSH, COMBO_END};
+const uint16_t PROGMEM combo_boot[] =        {KC_Z, KC_SLSH, COMBO_END};
 
-// const uint16_t PROGMEM combo_vimode[] = {KC_T, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_leaderkey[] = {KC_N, KC_K, COMBO_END};
-const uint16_t PROGMEM combo_undo[] = {KC_L, KC_U, COMBO_END};
-// const uint16_t PROGMEM combo_yank[] = {KC_U, KC_Y, COMBO_END};
-// const uint16_t PROGMEM combo_paste[] = {KC_F, KC_P, COMBO_END};
-const uint16_t PROGMEM combo_sym[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl[] =      {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo_os_gui[] =      {KC_K, KC_H, COMBO_END};
+const uint16_t PROGMEM combo_os_alt[] =      {KC_DOT, KC_COMM, COMBO_END};
+
+const uint16_t PROGMEM combo_os_gui_l[] =    {KC_D, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl_l[] =    {KC_C, KC_D, COMBO_END};
+const uint16_t PROGMEM combo_os_alt_l[] =    {KC_X, KC_C, COMBO_END};
+
+const uint16_t PROGMEM combo_os_guialt_l[] = {KC_T, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_guialt[] =   {KC_K, KC_N, COMBO_END};
+
+const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_P, COMBO_END};
+const uint16_t PROGMEM combo_os_guisft[] =   {KC_L, KC_M, COMBO_END};
+
+const uint16_t PROGMEM combo_os_hypr[] =     {KC_Z, KC_X, COMBO_END};
+
+ const uint16_t PROGMEM combo_mouse[] =       {KC_T, KC_G, COMBO_END};
+
+const uint16_t PROGMEM combo_esc[] =         {KC_F, KC_P, COMBO_END};
+const uint16_t PROGMEM combo_tab[] =         {KC_W, KC_P, COMBO_END};
+// const uint16_t PROGMEM combo_esc1[] =         {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_esc2[] =         {KC_Q, KC_W, COMBO_END};
 
 combo_t key_combos[] = {
-    // COMBO(combo_boot, QK_BOOT),
+    COMBO(combo_os_gui_l,OS_LGUI),
+    COMBO(combo_os_ctl_l, OS_LCTL),
+    COMBO(combo_os_alt_l, OS_LALT),
+    COMBO(combo_os_gui, OS_LGUI),
     COMBO(combo_os_ctl, OS_LCTL),
-    COMBO(combo_os_ctl2, OS_LCTL),
     COMBO(combo_os_alt, OS_LALT),
-    // COMBO(combo_os_gui, OS_RGUI),
-    // COMBO(combo_os_gui2, OS_LGUI),
-    COMBO(combo_os_altgui,OS_LAG),
-    COMBO(combo_leaderkey, KC_F13),
-    // COMBO(combo_vimode, OSL(LVIM)),
-    // COMBO(combo_undo, LGUI(KC_Z)),
-    // COMBO(combo_yank, LGUI(KC_C)),
-    // COMBO(combo_paste, LGUI(KC_V)),
-    COMBO(combo_pause,KC_MPLY),
-    COMBO(combo_sym,OSL(LSYM)),
+
+    COMBO(combo_mouse, MS_BTN1),
+
+    COMBO(combo_os_guialt_l,OS_LAG),
+    COMBO(combo_os_guialt,OS_LAG),
+
+    COMBO(combo_os_guisft_l,OS_LSG),
+    COMBO(combo_os_guisft,OS_LSG),
+
+    // COMBO(combo_os_hypr,OS_HYPR),
+
+    COMBO(combo_tab, KC_TAB),
+    COMBO(combo_esc, KC_ESC),
+    // COMBO(combo_esc1, KC_ESC),
+    COMBO(combo_esc2, KC_ESC)
 };
 
 enum custom_keycodes {
@@ -78,7 +94,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P,   KC_B,     KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
         KC_A,  KC_S,   KC_R, KC_T,   KC_G,                     KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
         KC_Z,  KC_X,   KC_C, KC_D,  KC_V,                      KC_K,  KC_H, KC_COMM, KC_DOT, KC_SLSH,
-        MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
+        // MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_TAB),LT(LSYM,KC_TAB)
+            KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
 
     [LNAV] = LAYOUT_eg(

@@ -34,30 +34,30 @@ enum layers {
     LMOUSE
 };
 
-const uint16_t PROGMEM combo_boot[] = {KC_Z, KC_SLSH, COMBO_END};
+const uint16_t PROGMEM combo_boot[] =        {KC_Z, KC_SLSH, COMBO_END};
 
-const uint16_t PROGMEM combo_os_ctl[] = {KC_H, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo_os_gui[] = {KC_K, KC_H, COMBO_END};
-const uint16_t PROGMEM combo_os_alt[] = {KC_DOT, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl[] =      {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM combo_os_gui[] =      {KC_K, KC_H, COMBO_END};
+const uint16_t PROGMEM combo_os_alt[] =      {KC_DOT, KC_COMM, COMBO_END};
 
-const uint16_t PROGMEM combo_os_gui_l[] = {KC_D, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_os_ctl_l[] = {KC_C, KC_D, COMBO_END};
-const uint16_t PROGMEM combo_os_alt_l[] = {KC_X, KC_C, COMBO_END};
+const uint16_t PROGMEM combo_os_gui_l[] =    {KC_D, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_ctl_l[] =    {KC_C, KC_D, COMBO_END};
+const uint16_t PROGMEM combo_os_alt_l[] =    {KC_X, KC_C, COMBO_END};
 
-// const uint16_t PROGMEM combo_os_sftgui[] = {KC_J ,KC_L, COMBO_END
 const uint16_t PROGMEM combo_os_guialt_l[] = {KC_T, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_os_guialt[] = {KC_K, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_os_guialt[] =   {KC_K, KC_N, COMBO_END};
 
-const uint16_t PROGMEM combo_os_guisft[] = {KC_K, KC_M, COMBO_END};
-const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_P, COMBO_END};
+const uint16_t PROGMEM combo_os_guisft[] =   {KC_L, KC_M, COMBO_END};
 
-const uint16_t PROGMEM combo_os_hypr[] = {KC_Z, KC_X, COMBO_END};
+const uint16_t PROGMEM combo_os_hypr[] =     {KC_Z, KC_X, COMBO_END};
 
-const uint16_t PROGMEM combo_mouse[] = {KC_T, KC_G, COMBO_END};
+ const uint16_t PROGMEM combo_mouse[] =       {KC_T, KC_G, COMBO_END};
 
-const uint16_t PROGMEM combo_tab[] = {KC_F, KC_P, COMBO_END};
-const uint16_t PROGMEM combo_esc[] = {KC_F, KC_W, COMBO_END};
-
+const uint16_t PROGMEM combo_esc[] =         {KC_F, KC_P, COMBO_END};
+const uint16_t PROGMEM combo_tab[] =         {KC_W, KC_P, COMBO_END};
+// const uint16_t PROGMEM combo_esc1[] =         {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_esc2[] =         {KC_Q, KC_W, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(combo_os_gui_l,OS_LGUI),
@@ -70,14 +70,17 @@ combo_t key_combos[] = {
     COMBO(combo_mouse, MS_BTN1),
 
     COMBO(combo_os_guialt_l,OS_LAG),
-    COMBO(combo_os_guisft_l,OS_LSG),
     COMBO(combo_os_guialt,OS_LAG),
+
+    COMBO(combo_os_guisft_l,OS_LSG),
     COMBO(combo_os_guisft,OS_LSG),
 
     // COMBO(combo_os_hypr,OS_HYPR),
 
     COMBO(combo_tab, KC_TAB),
-    COMBO(combo_esc, KC_ESC)
+    COMBO(combo_esc, KC_ESC),
+    // COMBO(combo_esc1, KC_ESC),
+    COMBO(combo_esc2, KC_ESC)
 };
 
 enum custom_keycodes {
@@ -95,16 +98,15 @@ enum custom_keycodes {
     moYank,
     moPaste,
     moJLines,
-    moGoStart,
-    moGoTop,
+    moGoStartL,
+    moGoEndL,
     moGoEnd,
-    moGoEndLine,
+    moGoTop,
     linux,
     POS_00, POS_01,  POS_02, POS_03, POS_04,
     POS_10, POS_11,  POS_12, POS_13, POS_14,
     POS_20, POS_21,  POS_22, POS_23, POS_24
 };
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -118,8 +120,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P, KC_B,      KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
                 KC_A,  KC_S,   KC_R, KC_T, KC_G,      KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
                 MT(MOD_HYPR,KC_Z),  KC_X,   KC_C, KC_D, KC_V,      KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
-            MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
+            KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
+            // MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
+
 
     [CTLBASED] = LAYOUTCONV(
         _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______,
@@ -127,11 +131,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______,
                           _______, _______, MT(MOD_LCTL,KC_ENTER),           _______, _______, _______
       ),
+
     [LNAV] = LAYOUTCONV(
-         KC_ESC, moWord, _______, moPaste,    moBack,              KC_PGUP,  moUndo,       KC_UP,    moYank,   KC_DEL,
-         KC_ESC, _______,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),    KC_PGDN,  KC_LEFT,     KC_DOWN,  KC_RIGHT, moOpenLine,
-         _______,    moSelLine,  moDel,moDel, KC_LALT,              moDelRight,moBspc, _______,  _______,  KC_ENTER,
-                          _______,MO(LMOSFT),MT(MOD_LCTL,KC_ENTER),                                XXXXXXX, _______, _______
+         KC_ESC, moWord, _______, moPaste,    moBack,                KC_PGUP, moUndo,     KC_UP,    moYank,   KC_DEL,
+         KC_ESC, _______,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, moOpenLine,
+         _______,    moSelLine,  moDel,moDel, moDelRight,            KC_ESC,  KC_BSPC, KC_HOME, KC_END,    KC_ENTER,
+                          _______,MO(LMOSFT),_______,  XXXXXXX, _______, _______
     ),
 
     /*
@@ -144,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LSYM] =LAYOUTCONV(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,        KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
-         MO(LFKEYS), KC_GRV,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, S(KC_8),  KC_BSLS,
+         LSFT(KC_3),MT(LFKEYS,KC_GRV) ,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, S(KC_8),  KC_BSLS,
                            _______, _______,   _______,          MS_BTN2,  XXXXXXX, _______
     ),
     [LFKEYS] =LAYOUTCONV(
@@ -163,8 +168,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // motion goto
     [LMOGO] = LAYOUTCONV(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, moGoEndLine, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, moGoStart,XXXXXXX, XXXXXXX, moGoTop,  XXXXXXX, XXXXXXX, moGoEnd, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, moGoEnd, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, moGoStartL,XXXXXXX, XXXXXXX, moGoTop,  XXXXXXX, XXXXXXX, moGoEndL, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                           XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX
       ),
@@ -376,7 +381,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 unregister_code(cmdKey);
                 return false;
 
-            case moGoStart:
+            case moGoStartL:
                 if(myOs==OS_MAC){
                     register_code(cmdKey);
                     tap_code(KC_LEFT);
@@ -386,7 +391,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 }
                 return false;
 
-            case moGoEndLine:
+            case moGoEndL:
                 if(myOs==OS_MAC){
                     register_code(cmdKey);
                     tap_code(KC_RIGHT);
