@@ -1,0 +1,11 @@
+
+#define TAPPING_TERM 200
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+#define PERMISSIVE_HOLD
+#define CHORDAL_HOLD
+
+// #define TAPPING_TERM 200
+// #define PERMISSIVE_HOLD
+// #define FLOW_TAP_TERM 100
+// #define CHORDAL_HOLD
+// #define SPECULATIVE_HOLD
