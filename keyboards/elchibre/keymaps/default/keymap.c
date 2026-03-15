@@ -81,6 +81,7 @@ const uint16_t PROGMEM combo_os_guialt[] =   {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM combo_os_guisft[] =   {KC_L, KC_M, COMBO_END};
 
 // const uint16_t PROGMEM combo_os_hypr[] =     {KC_Z, KC_X, COMBO_END};
+const uint16_t PROGMEM combo_os_shift[] =     {KC_M, KC_N, COMBO_END};
 
  // const uint16_t PROGMEM combo_mouse[] =       {KC_T, KC_G, COMBO_END};
 
@@ -96,6 +97,7 @@ combo_t key_combos[] = {
     // COMBO(combo_os_gui, OS_LGUI),
     // COMBO(combo_os_ctl, OS_LCTL),
     // COMBO(combo_os_alt, OS_LALT),
+    COMBO(combo_os_shift, OS_LSFT),
 
     // COMBO(combo_mouse, MS_BTN1),
 
@@ -123,9 +125,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [DEFAULT] = LAYOUTCONV(
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P, KC_B,      KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
                 // LT(LUI, KC_A),  MT(MOD_LALT, KC_S),   MT(MOD_LCTL,KC_R), MT(MOD_LGUI,KC_T), KC_G,     KC_M,  MT(MOD_LGUI,KC_N), MT(MOD_LCTL, KC_E),   MT(MOD_LALT ,  KC_I), LT(LUI,  KC_O),
-                KC_A,  KC_S,   KC_R, LT(LMO,KC_T), KC_G,      KC_M,  LT(LMO,KC_N),  KC_E,    KC_I,   KC_O,
+                LT(LMO,KC_A),  KC_S,   KC_R, KC_T, KC_G,      KC_M,  KC_N,  KC_E,    KC_I,   LT(LMO,KC_O),
                 // MT(MOD_HYPR,KC_Z),  KC_X,   KC_C, KC_D, KC_V,      KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
-                KC_Z,  KC_X,   MT(MOD_LALT,KC_C), MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), MT(MOD_LALT,KC_COMM), KC_DOT, LT(LMOUSE,KC_SLSH),
+                KC_Z,  KC_X,   MT(MOD_LALT,KC_C), MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), MT(MOD_LALT,KC_COMM), KC_DOT, LT(LMO,KC_SLSH),
             KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
             // MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
@@ -140,8 +142,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LNAV] = LAYOUTCONV(
          KC_ESC, XXXXXXX, LSFT(KC_TAB), XXXXXXX,    XXXXXXX,                KC_PGUP, XXXXXXX,     KC_UP,    XXXXXXX,   KC_DEL,
          KC_ESC,  LSFT(KC_TAB),  KC_TAB, KC_ENTER, OSL(LMOGO),         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, KC_ENTER,
-         _______,    XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,            KC_ESC,  KC_BSPC, KC_HOME, KC_END,    XXXXXXX,
-                          KC_LSFT,KC_LSFT,_______,  XXXXXXX, _______, _______
+         _______,    XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,            KC_ESC,  KC_BSPC, KC_VOLD, KC_VOLU, KC_MPLY,
+                          KC_LSFT,KC_LGUI,KC_LGUI,  XXXXXXX, _______, _______
     ),
 
 
@@ -156,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,        KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
          LSFT(KC_3),MT(LFKEYS,KC_GRV) ,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, S(KC_8),  KC_BSLS,
-                           _______, _______,   _______,          MS_BTN2,  XXXXXXX, _______
+                           KC_LSFT, _______,   _______,          MS_BTN2,  XXXXXXX, _______
     ),
     [LFKEYS] =LAYOUTCONV(
          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
@@ -176,7 +178,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LMO] = LAYOUTCONV(
          _______, moWord,_______, moPaste,    moBack,                moJLines, _______,     moUndo,    moYank,   _______,
          moGoAppend, _______,_______, _______, OSL(LMOGO),         _______, _______,    moBack,  moGoInsert, moOpenLine,
-         _______,    moSelLine,  moChange, moDel, moVisual,            _______,  KC_BSPC, _______, _______,    _______,
+         _______,    moSelLine,  moChange, moDel, moVisual,            _______,  KC_BSPC, _______, _______,    LSFT(KC_SLSH),
                           MO(LMOSFT),MO(LMOSFT),_______,  XXXXXXX, _______, _______
     ),
     // motion goto
@@ -568,8 +570,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record)
 {
-    // if(last_input_activity_elapsed() < QUICK_TAP_TERM) return false;
-
     switch (keycode) {
         case LT(LNAV, KC_SPACE)://return true;
                 if(last_input_activity_elapsed() > QUICK_TAP_TERM) return true;
@@ -577,6 +577,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record)
         case MT(MOD_LGUI, KC_ENTER): return true;
         case MT(MOD_LSFT, KC_ESC): return true;
         case LT(LSYM, KC_TAB): return true;
+        case LT(LMOUSE,KC_SLSH): return true;
         default: return false;
     }
 }

@@ -15,11 +15,39 @@
 
 ///////////////////////////////////////////////
 
-
 #include QMK_KEYBOARD_H
 #include "os_detection.h"
 #include "deferred_exec.h"
 
+enum custom_keycodes {
+    VIM_CMD = SAFE_RANGE,
+    moLayer,
+    moLayerOff,
+    moWord,
+    moBack,
+    moOpenLine,
+    moOpenLineUp,
+    moSelLine,
+    moSelLineUp,
+    moSelRight,
+    moDel,
+    moChange,
+    moBspc,
+    moUndo,
+    moRedo,
+    moYank,
+    moPaste,
+    moJLines,
+    moGoStartL,moGoInsert,moGoAppend,
+    moGoEndL,
+    moGoEnd,
+    moGoTop,
+    moVisual,
+    linux,
+    POS_00, POS_01,  POS_02, POS_03, POS_04,
+    POS_10, POS_11,  POS_12, POS_13, POS_14,
+    POS_20, POS_21,  POS_22, POS_23, POS_24
+};
 
 enum layers {
     DEFAULT,
@@ -27,6 +55,7 @@ enum layers {
     LNAV,
     LSYM,
     LUI,
+    LMO,
     LMOGO,
     LMOSFT,
     LCFG,
@@ -36,43 +65,43 @@ enum layers {
 
 const uint16_t PROGMEM combo_boot[] =        {KC_Z, KC_SLSH, COMBO_END};
 
-const uint16_t PROGMEM combo_os_ctl[] =      {KC_H, KC_COMM, COMBO_END};
-const uint16_t PROGMEM combo_os_gui[] =      {KC_K, KC_H, COMBO_END};
-const uint16_t PROGMEM combo_os_alt[] =      {KC_DOT, KC_COMM, COMBO_END};
+// const uint16_t PROGMEM combo_os_ctl[] =      {KC_H, KC_COMM, COMBO_END};
+// const uint16_t PROGMEM combo_os_gui[] =      {KC_K, KC_H, COMBO_END};
+// const uint16_t PROGMEM combo_os_alt[] =      {KC_DOT, KC_COMM, COMBO_END};
 
-const uint16_t PROGMEM combo_os_gui_l[] =    {KC_D, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_os_ctl_l[] =    {KC_C, KC_D, COMBO_END};
-const uint16_t PROGMEM combo_os_alt_l[] =    {KC_X, KC_C, COMBO_END};
+// const uint16_t PROGMEM combo_os_gui_l[] =    {KC_D, KC_V, COMBO_END};
+// const uint16_t PROGMEM combo_os_ctl_l[] =    {KC_C, KC_D, COMBO_END};
+// const uint16_t PROGMEM combo_os_alt_l[] =    {KC_X, KC_C, COMBO_END};
 
-const uint16_t PROGMEM combo_os_guialt_l[] = {KC_T, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_os_guialt[] =   {KC_K, KC_N, COMBO_END};
+// const uint16_t PROGMEM combo_os_guialt_l[] = {KC_T, KC_V, COMBO_END};
+const uint16_t PROGMEM combo_os_guialt[] =   {KC_K, KC_L, COMBO_END};
 
-const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_P, COMBO_END};
+// const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_P, COMBO_END};
 const uint16_t PROGMEM combo_os_guisft[] =   {KC_L, KC_M, COMBO_END};
 
-const uint16_t PROGMEM combo_os_hypr[] =     {KC_Z, KC_X, COMBO_END};
+// const uint16_t PROGMEM combo_os_hypr[] =     {KC_Z, KC_X, COMBO_END};
 
- const uint16_t PROGMEM combo_mouse[] =       {KC_T, KC_G, COMBO_END};
+ // const uint16_t PROGMEM combo_mouse[] =       {KC_T, KC_G, COMBO_END};
 
 const uint16_t PROGMEM combo_esc[] =         {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM combo_tab[] =         {KC_W, KC_P, COMBO_END};
 // const uint16_t PROGMEM combo_esc1[] =         {KC_T, KC_N, COMBO_END};
-const uint16_t PROGMEM combo_esc2[] =         {KC_Q, KC_W, COMBO_END};
+// const uint16_t PROGMEM combo_esc2[] =         {KC_Q, KC_W, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(combo_os_gui_l,OS_LGUI),
-    COMBO(combo_os_ctl_l, OS_LCTL),
-    COMBO(combo_os_alt_l, OS_LALT),
-    COMBO(combo_os_gui, OS_LGUI),
-    COMBO(combo_os_ctl, OS_LCTL),
-    COMBO(combo_os_alt, OS_LALT),
+    // COMBO(combo_os_gui_l,OS_LGUI),
+    // COMBO(combo_os_ctl_l, OS_LCTL),
+    // COMBO(combo_os_alt_l, OS_LALT),
+    // COMBO(combo_os_gui, OS_LGUI),
+    // COMBO(combo_os_ctl, OS_LCTL),
+    // COMBO(combo_os_alt, OS_LALT),
 
-    COMBO(combo_mouse, MS_BTN1),
+    // COMBO(combo_mouse, MS_BTN1),
 
-    COMBO(combo_os_guialt_l,OS_LAG),
+    // COMBO(combo_os_guialt_l,OS_LAG),
     COMBO(combo_os_guialt,OS_LAG),
 
-    COMBO(combo_os_guisft_l,OS_LSG),
+    // COMBO(combo_os_guisft_l,OS_LSG),
     COMBO(combo_os_guisft,OS_LSG),
 
     // COMBO(combo_os_hypr,OS_HYPR),
@@ -80,46 +109,22 @@ combo_t key_combos[] = {
     COMBO(combo_tab, KC_TAB),
     COMBO(combo_esc, KC_ESC),
     // COMBO(combo_esc1, KC_ESC),
-    COMBO(combo_esc2, KC_ESC)
+    // COMBO(combo_esc2, KC_ESC)
 };
 
-enum custom_keycodes {
-    VIM_CMD = SAFE_RANGE,
-    moWord,
-    moBack,
-    moOpenLine,
-    moSelLine,
-    moSelLineUp,
-    moDelRight,
-    moDel,
-    moBspc,
-    moUndo,
-    moRedo,
-    moYank,
-    moPaste,
-    moJLines,
-    moGoStartL,
-    moGoEndL,
-    moGoEnd,
-    moGoTop,
-    linux,
-    POS_00, POS_01,  POS_02, POS_03, POS_04,
-    POS_10, POS_11,  POS_12, POS_13, POS_14,
-    POS_20, POS_21,  POS_22, POS_23, POS_24
-};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
     /*
      *      q w f p b   j l u y
      *      a s r t g   m n e i o
      *      z x c d v   k h , . /
-     *
      */
     [DEFAULT] = LAYOUTCONV(
         LT(LUI,KC_Q),  KC_W,   KC_F, KC_P, KC_B,      KC_J,  KC_L,  KC_U,    KC_Y,   KC_BSPC,
-                KC_A,  KC_S,   KC_R, KC_T, KC_G,      KC_M,  KC_N,  KC_E,    KC_I,   KC_O,
-                MT(MOD_HYPR,KC_Z),  KC_X,   KC_C, KC_D, KC_V,      KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
+                // LT(LUI, KC_A),  MT(MOD_LALT, KC_S),   MT(MOD_LCTL,KC_R), MT(MOD_LGUI,KC_T), KC_G,     KC_M,  MT(MOD_LGUI,KC_N), MT(MOD_LCTL, KC_E),   MT(MOD_LALT ,  KC_I), LT(LUI,  KC_O),
+                KC_A,  KC_S,   KC_R, LT(LMO,KC_T), KC_G,      KC_M,  LT(LMO,KC_N),  KC_E,    KC_I,   KC_O,
+                // MT(MOD_HYPR,KC_Z),  KC_X,   KC_C, KC_D, KC_V,      KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
+                KC_Z,  KC_X,   MT(MOD_LALT,KC_C), MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), MT(MOD_LALT,KC_COMM), KC_DOT, LT(LMOUSE,KC_SLSH),
             KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
             // MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
@@ -131,13 +136,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______,
                           _______, _______, MT(MOD_LCTL,KC_ENTER),           _______, _______, _______
       ),
-
     [LNAV] = LAYOUTCONV(
-         KC_ESC, moWord, _______, moPaste,    moBack,                KC_PGUP, moUndo,     KC_UP,    moYank,   KC_DEL,
-         KC_ESC, _______,  LSFT(KC_TAB),KC_TAB,  OSL(LMOGO),         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, moOpenLine,
-         _______,    moSelLine,  moDel,moDel, moDelRight,            KC_ESC,  KC_BSPC, KC_HOME, KC_END,    KC_ENTER,
-                          _______,MO(LMOSFT),_______,  XXXXXXX, _______, _______
+         KC_ESC, XXXXXXX, LSFT(KC_TAB), XXXXXXX,    XXXXXXX,                KC_PGUP, XXXXXXX,     KC_UP,    XXXXXXX,   KC_DEL,
+         KC_ESC,  LSFT(KC_TAB),  KC_TAB, KC_ENTER, OSL(LMOGO),         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, KC_ENTER,
+         _______,    XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,            KC_ESC,  KC_BSPC, KC_HOME, KC_END,    XXXXXXX,
+                          KC_LSFT,KC_LSFT,_______,  XXXXXXX, _______, _______
     ),
+
 
     /*
      *      1 2 3 4 5   6 7 8 9 0
@@ -154,7 +159,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [LFKEYS] =LAYOUTCONV(
          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
-         KC_F11, KC_F12, XXXXXXX, XXXXXXX, XXXXXXX,        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+         KC_F11, KC_F12,   XXXXXXX, XXXXXXX, XXXXXXX,        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                            _______, _______,   _______,          _______,  _______, _______
     ),
@@ -166,25 +171,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                            _______,MS_BTN3, MS_BTN1,                         XXXXXXX,  _______, _______
     ),
 
+    //helix motion
+    [LMO] = LAYOUTCONV(
+         _______, moWord,_______, moPaste,    moBack,                moJLines, _______,     moUndo,    moYank,   _______,
+         moGoAppend, _______,_______, _______, OSL(LMOGO),         _______, _______,    moBack,  moGoInsert, moOpenLine,
+         _______,    moSelLine,  moChange, moDel, moVisual,            _______,  KC_BSPC, _______, _______,    _______,
+                          MO(LMOSFT),MO(LMOSFT),_______,  XXXXXXX, _______, _______
+    ),
     // motion goto
     [LMOGO] = LAYOUTCONV(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, moGoEnd, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, moGoEndL, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, moGoStartL,XXXXXXX, XXXXXXX, moGoTop,  XXXXXXX, XXXXXXX, moGoEndL, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                           XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX
       ),
     // shift motions
     [LMOSFT] = LAYOUTCONV(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      moJLines, moRedo, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, moSelLineUp, XXXXXXX, moDelRight, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX,  XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX,      moJLines, XXXXXXX, moRedo, XXXXXXX, XXXXXXX,
+        moGoAppend, XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX, moGoInsert, moOpenLineUp,
+        XXXXXXX,  moSelLineUp, XXXXXXX, XXXXXXX,moSelRight,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                           XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX
       ),
 
     [LMOUSE] = LAYOUTCONV(
         POS_00, POS_01,  POS_02, POS_03, POS_04,      XXXXXXX, moRedo, XXXXXXX, XXXXXXX, KC_MPLY,
         POS_10, POS_11,  POS_12, POS_13, POS_14,      XXXXXXX, MS_BTN1, MS_BTN3, MS_BTN2, XXXXXXX,
-        POS_20, POS_21,  POS_22, POS_23, POS_24,      XXXXXXX, XXXXXXX, KC_VOLD, KC_VOLU, XXXXXXX,
+        POS_20, POS_21,  POS_22, POS_23, POS_24,      XXXXXXX, KC_MPLY, KC_VOLD, KC_VOLU, XXXXXXX,
                           XXXXXXX, XXXXXXX, MS_BTN1,      MS_BTN2, MS_BTN3, XXXXXXX
       ),
 
@@ -207,9 +219,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 uint8_t myOs=0;// 0 mac \ 1 linux
 
 uint8_t countX=0;
+bool shift=false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record)
 {
+    // if(!process_record_helix(keycode,record))return false;
+
     uint16_t cmdKey=KC_LGUI;
     if(keymap_config.swap_lctl_lgui ) cmdKey=KC_LCTL;
     if(keycode!=moSelLineUp && keycode!=moSelLine)countX=0;
@@ -265,13 +280,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 }
                 else
                 {
-                    register_code(KC_LGUI);
+                    register_code(cmdKey);
                     tap_code(KC_V);
-                    unregister_code(KC_LGUI);
+                    unregister_code(cmdKey);
                 }
                 return false;
 
             case moYank:
+                if(shift)
+                {
+                    shift=false;
+                    unregister_code(KC_LSFT);
+                }
+
                 if(myOs==1)
                 {
                     register_code(KC_LCTL);
@@ -280,9 +301,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 }
                 else
                 {
-                    register_code(KC_LGUI);
+                    register_code(cmdKey);
                     tap_code(KC_C);
-                    unregister_code(KC_LGUI);
+                    unregister_code(cmdKey);
                 }
                 return false;
 
@@ -301,10 +322,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 return false;
 
             case moOpenLine:
+                // layer_off(LMOHX);
                 if(myOs==1)
                 {
                     tap_code(KC_END);
                 }
+                else
+                {
+                    register_code(cmdKey);
+                    tap_code(KC_RIGHT);
+                    unregister_code(cmdKey);
+                }
+                tap_code(KC_ENTER);
+                return false;
+
+            case moOpenLineUp:
+                // layer_off(LMOHX);
+                tap_code(KC_UP);
+                if(myOs==1) tap_code(KC_END);
                 else
                 {
                     register_code(cmdKey);
@@ -352,20 +387,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 }
                 return false;
 
-            case moDelRight:
+            case moSelRight:
+                if(shift)return false;
                 register_code(KC_LSFT);
                 register_code(cmdKey);
                 tap_code(KC_RIGHT);
                 unregister_code(cmdKey);
                 unregister_code(KC_LSFT);
-                tap_code(KC_DEL);
                 return false;
 
             case moBspc:
                 tap_code(KC_BSPC);
                 return false;
 
+            case moVisual:
+                shift=!shift;
+
+                if(shift) register_code(KC_LSFT);
+                else unregister_code(KC_LSFT);
+
+                return false;
+
+
+            case moChange:
+                tap_code(KC_DEL);
+                return false;
+
             case moDel:
+                if(shift)
+                {
+                    shift=false;
+                    unregister_code(KC_LSFT);
+                }
+
+                register_code(cmdKey);
+                tap_code(KC_C);
+                unregister_code(cmdKey);
                 tap_code(KC_DEL);
                 return false;
 
@@ -391,6 +448,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 }
                 return false;
 
+            case moGoInsert:
+                if(myOs==OS_MAC){
+                    register_code(cmdKey);
+                    tap_code(KC_LEFT);
+                    unregister_code(cmdKey);
+                }else{
+                    tap_code(KC_HOME);
+                }
+                layer_off(LMOSFT);
+                // layer_off(LMOHX);
+                return false;
+
             case moGoEndL:
                 if(myOs==OS_MAC){
                     register_code(cmdKey);
@@ -399,6 +468,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
                 }else{
                     tap_code(KC_END);
                 }
+                return false;
+
+            case moGoAppend:
+                if(myOs==OS_MAC){
+                    register_code(cmdKey);
+                    tap_code(KC_RIGHT);
+                    unregister_code(cmdKey);
+                }else{
+                    tap_code(KC_END);
+                }
+                layer_off(LMOSFT);
+                // layer_off(LMOHX);
                 return false;
 
             case  moJLines:
@@ -466,89 +547,21 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
 
 
 
-led_config_t g_led_config = {
-    // Key Matrix to LED Index
-    {
-         {9,     9,    9,   9,    9,            3, 3, 3,    3,     3 },
-         {10,    10,   10,  10,   10,           2, 2, 2,    2,     2 },
-         {8,     8,    8,   8,    8,            4, 4, 4,    4,     4 },
-         {NO_LED, NO_LED, 7, NO_LED,      6,    6, 6, 5, NO_LED, NO_LED, }
-    },
-    // LED Index to Physical Positon
-    {
-        { 128, 40 },
-        { 128, 30 },
-        { 166, 0 },
-        { 255, 0 },
-        { 255, 48 },
-        { 178, 64 },
-        { 128, 64 },
-        { 77, 64 },
-        { 0, 48 },
-        { 0, 0 },
-        { 115, 0 }
-    },
-    //  LED Index to Flag
-    //  https://docs.qmk.fm/#/feature_rgb_matrix?id=flags
-    { 8, 8, 2, 2, 2, 2, 2, 2, 2, 2, 2 }
-};
 
-// Layer and Mods indicator
-#define LED_CENTER_TOP 1
-#define LED_CENTER_BOTTOM 0
+// uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t* record, uint16_t prev_keycode) {
 
-#define LAYER_R layer_colors[layer][0] *  RGB_INDICATOR_BRIGHTNESS / 255
-#define LAYER_G layer_colors[layer][1] *  RGB_INDICATOR_BRIGHTNESS / 255
-#define LAYER_B layer_colors[layer][2] *  RGB_INDICATOR_BRIGHTNESS / 255
-
-#define MODS_ACTIVE(mods) \
-    ((get_mods()|get_oneshot_mods()) & MOD_MASK_##mods ? RGB_INDICATOR_BRIGHTNESS:0)
-#define SHIFT_ACTIVE (get_mods() & MOD_MASK_SHIFT ? RGB_INDICATOR_BRIGHTNESS/4:0)
-#define MODS_R MODS_ACTIVE(CTRL) + SHIFT_ACTIVE
-#define MODS_G MODS_ACTIVE(GUI) + SHIFT_ACTIVE
-#define MODS_B MODS_ACTIVE(ALT) + SHIFT_ACTIVE
-
-const uint8_t PROGMEM layer_colors[][3] = {
-    {RGB_OFF},
-    {RGB_WHITE},
-    {RGB_WHITE},
-    {RGB_WHITE},
-    {RGB_WHITE},
-    {RGB_WHITE},
-    {RGB_WHITE},
-    {RGB_WHITE}
-};
-
-void set_rgb_matrix_indicators(uint8_t led_min, uint8_t led_max) {
-    #if defined(RGB_LAYER_INDICATOR_ENABLE)
-    int layer = get_highest_layer(layer_state|default_layer_state);
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, LAYER_R, LAYER_G, LAYER_B);
-    /* uprintf("layer RGB: (%u, %u, %u)\n", LAYER_R, LAYER_G, LAYER_B); */
-    #else
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_TOP, 120, 0, 110);
-    #endif
-
-    #if defined(RGB_MODS_INDICATOR_ENABLE)
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, MODS_R, MODS_G, MODS_B);
-    /* uprintf("mod RGB: (%u, %u, %u)\n", MODS_R, MODS_G, MODS_B); */
-    #else
-    RGB_MATRIX_INDICATOR_SET_COLOR(LED_CENTER_BOTTOM, 80, 0, 30);
-    #endif
-
-}
-
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    set_rgb_matrix_indicators(led_min, led_max);
-    return false;
-}
-
+//     if(keycode== LT(LNAV, KC_SPACE)) return 50;
+//     if (is_flow_tap_key(keycode) && is_flow_tap_key(prev_keycode)) {
+//         return FLOW_TAP_TERM;
+//     }
+//     return 0;
+// }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case MT(MOD_LGUI, KC_ENTER):
-            return 100;
-        default:
-            return TAPPING_TERM;
+        case MT(MOD_LGUI, KC_ENTER): return 100;
+        case LT(LNAV, KC_SPACE): return 100;
+        default: return TAPPING_TERM;
     }
 }
 
@@ -557,7 +570,7 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record)
     // if(last_input_activity_elapsed() < QUICK_TAP_TERM) return false;
 
     switch (keycode) {
-        case LT(LNAV, KC_SPACE):
+        case LT(LNAV, KC_SPACE)://return true;
                 if(last_input_activity_elapsed() > QUICK_TAP_TERM) return true;
                 return false;
         case MT(MOD_LGUI, KC_ENTER): return true;
