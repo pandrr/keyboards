@@ -127,7 +127,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 // LT(LUI, KC_A),  MT(MOD_LALT, KC_S),   MT(MOD_LCTL,KC_R), MT(MOD_LGUI,KC_T), KC_G,     KC_M,  MT(MOD_LGUI,KC_N), MT(MOD_LCTL, KC_E),   MT(MOD_LALT ,  KC_I), LT(LUI,  KC_O),
                 LT(LMO,KC_A),  KC_S,   KC_R, KC_T, KC_G,      KC_M,  KC_N,  KC_E,    KC_I,   LT(LMO,KC_O),
                 // MT(MOD_HYPR,KC_Z),  KC_X,   KC_C, KC_D, KC_V,      KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
-                KC_Z,  KC_X,   MT(MOD_LALT,KC_C), MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), MT(MOD_LALT,KC_COMM), KC_DOT, LT(LMO,KC_SLSH),
+                MT(MOD_LALT,KC_Z),  KC_X,   KC_C, MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), KC_COMM, KC_DOT, MT(MOD_LALT,KC_SLSH),
             KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
             // MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
@@ -140,9 +140,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           _______, _______, MT(MOD_LCTL,KC_ENTER),           _______, _______, _______
       ),
     [LNAV] = LAYOUTCONV(
-         KC_ESC, XXXXXXX, LSFT(KC_TAB), XXXXXXX,    XXXXXXX,                KC_PGUP, XXXXXXX,     KC_UP,    XXXXXXX,   KC_DEL,
-         KC_ESC,  LSFT(KC_TAB),  KC_TAB, KC_ENTER, OSL(LMOGO),         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, KC_ENTER,
-         _______,    XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,            KC_ESC,  KC_BSPC, KC_VOLD, KC_VOLU, KC_MPLY,
+         KC_ESC, XXXXXXX, LSFT(KC_TAB), XXXXXXX,  LSFT(KC_TAB),                KC_PGUP, XXXXXXX,     KC_UP,    XXXXXXX,   KC_DEL,
+         KC_ESC,  LSFT(KC_TAB),  KC_TAB, KC_COLN, KC_TAB,         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, KC_ENTER,
+         _______,    KC_BRID,  KC_BRIU, KC_DEL, XXXXXXX,            KC_ESC,  KC_SPACE, KC_VOLD, KC_VOLU, KC_MPLY,
                           KC_LSFT,KC_LGUI,KC_LGUI,  XXXXXXX, _______, _______
     ),
 
@@ -157,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LSYM] =LAYOUTCONV(
          KC_1,    KC_2,    KC_3,    KC_4,       KC_5,            KC_6,     KC_7,    KC_8,    KC_9,    KC_0,
          KC_TILD, KC_LBRC, KC_LCBR, KC_LPRN,    KC_MINUS,        KC_PLUS,  KC_RPRN, KC_RCBR, KC_RBRC, KC_PIPE,
-         LSFT(KC_3),MT(LFKEYS,KC_GRV) ,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, S(KC_8),  KC_BSLS,
+         S(KC_8),MT(LFKEYS,KC_GRV) ,  KC_QUOT, S(KC_QUOT), S(KC_MINUS),     KC_EQUAL, KC_COLN, KC_SCLN, KC_DOT,  KC_BSLS,
                            KC_LSFT, _______,   _______,          MS_BTN2,  XXXXXXX, _______
     ),
     [LFKEYS] =LAYOUTCONV(

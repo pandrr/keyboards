@@ -64,56 +64,16 @@ enum layers {
     LMOUSE
 };
 
-const uint16_t PROGMEM combo_boot[] =        {KC_Z, KC_SLSH, COMBO_END};
-
-// const uint16_t PROGMEM combo_os_ctl[] =      {KC_H, KC_COMM, COMBO_END};
-// const uint16_t PROGMEM combo_os_gui[] =      {KC_K, KC_H, COMBO_END};
-// const uint16_t PROGMEM combo_os_alt[] =      {KC_DOT, KC_COMM, COMBO_END};
-
-// const uint16_t PROGMEM combo_os_gui_l[] =    {KC_D, KC_V, COMBO_END};
-// const uint16_t PROGMEM combo_os_ctl_l[] =    {KC_C, KC_D, COMBO_END};
-// const uint16_t PROGMEM combo_os_alt_l[] =    {KC_X, KC_C, COMBO_END};
-
-// const uint16_t PROGMEM combo_os_guialt_l[] = {KC_T, KC_V, COMBO_END};
-const uint16_t PROGMEM combo_os_guialt[] =   {KC_K, KC_L, COMBO_END};
-
-// const uint16_t PROGMEM combo_os_guisft_l[] = {KC_G, KC_P, COMBO_END};
-const uint16_t PROGMEM combo_os_guisft[] =   {KC_L, KC_M, COMBO_END};
-
-// const uint16_t PROGMEM combo_os_hypr[] =     {KC_Z, KC_X, COMBO_END};
-const uint16_t PROGMEM combo_os_shift[] =     {KC_M, KC_N, COMBO_END};
-
- // const uint16_t PROGMEM combo_mouse[] =       {KC_T, KC_G, COMBO_END};
-
 const uint16_t PROGMEM combo_esc[] =         {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM combo_tab[] =         {KC_W, KC_P, COMBO_END};
-// const uint16_t PROGMEM combo_esc1[] =         {KC_T, KC_N, COMBO_END};
-// const uint16_t PROGMEM combo_esc2[] =         {KC_Q, KC_W, COMBO_END};
 
 combo_t key_combos[] = {
-    // COMBO(combo_os_gui_l,OS_LGUI),
-    // COMBO(combo_os_ctl_l, OS_LCTL),
-    // COMBO(combo_os_alt_l, OS_LALT),
-    // COMBO(combo_os_gui, OS_LGUI),
-    // COMBO(combo_os_ctl, OS_LCTL),
-    // COMBO(combo_os_alt, OS_LALT),
-    COMBO(combo_os_shift, OS_LSFT),
-
-    // COMBO(combo_mouse, MS_BTN1),
-
-    // COMBO(combo_os_guialt_l,OS_LAG),
-    COMBO(combo_os_guialt,OS_LAG),
-
-    // COMBO(combo_os_guisft_l,OS_LSG),
-    COMBO(combo_os_guisft,OS_LSG),
-
-    // COMBO(combo_os_hypr,OS_HYPR),
 
     COMBO(combo_tab, KC_TAB),
     COMBO(combo_esc, KC_ESC),
-    // COMBO(combo_esc1, KC_ESC),
-    // COMBO(combo_esc2, KC_ESC)
 };
+
+
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -127,11 +87,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 // LT(LUI, KC_A),  MT(MOD_LALT, KC_S),   MT(MOD_LCTL,KC_R), MT(MOD_LGUI,KC_T), KC_G,     KC_M,  MT(MOD_LGUI,KC_N), MT(MOD_LCTL, KC_E),   MT(MOD_LALT ,  KC_I), LT(LUI,  KC_O),
                 LT(LMO,KC_A),  KC_S,   KC_R, KC_T, KC_G,      KC_M,  KC_N,  KC_E,    KC_I,   LT(LMO,KC_O),
                 // MT(MOD_HYPR,KC_Z),  KC_X,   KC_C, KC_D, KC_V,      KC_K,  KC_H, KC_COMM, KC_DOT, LT(LMOUSE,KC_SLSH),
-                KC_Z,  KC_X,   MT(MOD_LALT,KC_C), MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), MT(MOD_LALT,KC_COMM), KC_DOT, LT(LMO,KC_SLSH),
-            KC_LSFT,KC_LSFT,MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
+                KC_Z,  KC_X,   MT(MOD_LALT,KC_C), MT(MOD_LCTL,KC_D), KC_V,      KC_K,  MT(MOD_LCTL,KC_H), MT(MOD_LALT,KC_COMM), KC_DOT, LT(LUI,KC_SLSH),
+            OSM(MOD_LSFT),OSM(MOD_LSFT),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
             // MT(MOD_LSFT,KC_ESC),MT(MOD_LSFT,KC_ESC),MT(MOD_LGUI,KC_ENTER),       LT(LNAV,KC_SPACE),LT(LSYM,KC_F13),LT(LSYM,KC_F13)
     ),
 
+    [LNAV] = LAYOUTCONV(
+         KC_ESC,  QK_CAPS_WORD_TOGGLE, XXXXXXX, S(KC_TAB),    XXXXXXX,                KC_PGUP, KC_ESC,     KC_UP,    KC_TAB,   KC_DEL,
+         OS_LALT, OS_LSFT,  OS_LGUI, KC_TAB, OS_LGUI,         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, KC_ENTER,
+         XXXXXXX,    XXXXXXX,  OS_LCTL, KC_DEL, XXXXXXX,            KC_ESC,  KC_BSPC, KC_VOLD, KC_VOLU, KC_MPLY,
+                          KC_LSFT,KC_LGUI,KC_LGUI,  XXXXXXX, _______, _______
+    ),
 
     [CTLBASED] = LAYOUTCONV(
         _______, _______, _______, _______, _______,          _______, _______, _______, _______, _______,
@@ -139,12 +105,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______,
                           _______, _______, MT(MOD_LCTL,KC_ENTER),           _______, _______, _______
       ),
-    [LNAV] = LAYOUTCONV(
-         KC_ESC, XXXXXXX, LSFT(KC_TAB), XXXXXXX,    XXXXXXX,                KC_PGUP, XXXXXXX,     KC_UP,    XXXXXXX,   KC_DEL,
-         KC_ESC,  LSFT(KC_TAB),  KC_TAB, KC_ENTER, OSL(LMOGO),         KC_PGDN, KC_LEFT,    KC_DOWN,  KC_RIGHT, KC_ENTER,
-         _______,    XXXXXXX,  XXXXXXX, XXXXXXX, XXXXXXX,            KC_ESC,  KC_BSPC, KC_VOLD, KC_VOLU, KC_MPLY,
-                          KC_LSFT,KC_LGUI,KC_LGUI,  XXXXXXX, _______, _______
-    ),
 
 
     /*
@@ -169,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [LUI] = LAYOUTCONV(
         XXXXXXX, LCTL(LSFT(KC_TAB)), LALT(KC_UP), LCTL(KC_TAB), LGUI(KC_GRV), XXXXXXX, LGUI(KC_TAB),    HYPR(KC_SPACE) ,   LGUI(S(KC_TAB)),    _______,
-        XXXXXXX, LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_RIGHT), XXXXXXX,           XXXXXXX, HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), XXXXXXX,
+        KC_ESC, LALT(KC_LEFT), LALT(KC_DOWN), LALT(KC_RIGHT), XXXXXXX,           XXXXXXX, HYPR(KC_LEFT), HYPR(KC_DOWN), HYPR(KC_RIGHT), XXXXXXX,
         MO(LCFG), KC_VOLD, KC_VOLU, XXXXXXX, MS_BTN2,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX,
                            _______,MS_BTN3, MS_BTN1,                         XXXXXXX,  _______, _______
     ),
